@@ -7,6 +7,13 @@ ul, ol, li {
     list-style: none;
 }
 
+button {
+    padding: 0;
+    border: none;
+    margin: 0;
+    background: none;
+}
+
 .wrapper {
     max-width: 1260px;
     width: 80%;

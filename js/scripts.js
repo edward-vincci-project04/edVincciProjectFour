@@ -11,17 +11,17 @@
  * destinations will be put into a list on the page.  * 
  * 
  * 
-  Initial travel list to work with (subject to change and/or grow):
-  Bali, Indonesia
-  Kerry, Ireland
-  The Maldives
-  Waikato, New Zealand
-  McMurdo Station, Antarctica
-  Bridgetown, Barbados
-  Providencia, Colombia
-  Reykjavík, Iceland
-  Kyoto, Japan
-  Tromsø, Norway
+    Initial travel list to work with (subject to change and/or grow):
+    Bali, Indonesia
+    Kerry, Ireland
+    The Maldives
+    Waikato, New Zealand
+    McMurdo Station, Antarctica
+    Bridgetown, Barbados
+    Providencia, Colombia
+    Reykjavík, Iceland
+    Kyoto, Japan
+    Tromsø, Norway
  * 
  * Stretch goals:
  * 
