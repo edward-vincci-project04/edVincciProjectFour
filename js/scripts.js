@@ -37,5 +37,5 @@ vacayApp.init = () => {
 // doc ready
 // -------------------
 $(()=> {
-  console.log('doc ready test');
+    console.log('doc ready test');
 })
