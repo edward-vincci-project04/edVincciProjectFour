@@ -7,8 +7,8 @@
  * Main content of page will have a 'box' with pictures of weather preferences (Cold, warm, hot).
  * The imgs will be selectors or maybe using a click listener give the action an animation like a button to show it being selected.
  * 
- * The selection will populate travel destinations using ajax calls from which we will pull data out based on the temperature range the user selected. Those 
- * destinations will be pulled to a list on the page.  * 
+ * The selection will populate travel destinations from a list we created based on research (of best destinations) which we'll feed into the  ajax function from which we will pull data out based on the temperature range the user selected. Those 
+ * destinations will be put into a list on the page.  * 
  * 
  * 
  * Stretch goals:
@@ -18,7 +18,7 @@
  * top restaurants in the location selected
  * Recommended hotels in the location selected
  * selector for weather condition to further refine search
- * 
+ * when user selects city, a blurb about it will appear giving a small snippet of it.
  * 
  */
 
