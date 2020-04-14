@@ -10,28 +10,28 @@ $secondaryColor: #dded9a;
 
 // vertical + horizontal centering w/ flexbox
 @mixin flexCenter() {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 // fonts
 @mixin fontSize($sizeValue){
-  // font sizes turn into rem values
-  font-size: $sizeValue * 1px;
-  font-size: ($sizeValue/10) * 1rem;
+    // font sizes turn into rem values
+    font-size: $sizeValue * 1px;
+    font-size: ($sizeValue/10) * 1rem;
 }
 
 @mixin fontSans($size, $weight: 700, $color: $primaryBlack) {
-  @include fontSize($size);
-  font-family: 'Raleway', sans-serif;
-  font-weight: $weight;
-  color: $color;
+    @include fontSize($size);
+    font-family: 'Raleway', sans-serif;
+    font-weight: $weight;
+    color: $color;
 }
 
 @mixin fontSerif($size, $weight: 400, $color: $primaryBlack) {
-  @include fontSize($size);
-  font-family: 'Lora', serif;
-  font-weight: $weight;
-  color: $color;
+    @include fontSize($size);
+    font-family: 'Lora', serif;
+    font-weight: $weight;
+    color: $color;
 }
