@@ -267,6 +267,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  background: #80DEEA;
+}
+
 img {
   display: block;
 }
@@ -301,10 +305,32 @@ main .wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  max-width: 900px;
+  max-width: 700px;
+}
+
+main .landingContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: auto 0;
+  width: 100%;
 }
 
 main .userChoice {
@@ -320,20 +346,24 @@ main .userChoice {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  margin: auto 0;
+  margin-bottom: 40px;
   width: 100%;
 }
 
 main .userChoice li {
   width: 100px;
+  -webkit-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+}
+
+main .userChoice li:hover {
+  -webkit-transform: scale(1.2) rotate(20deg);
+          transform: scale(1.2) rotate(20deg);
 }
 
 main .userChoice img {
   width: 100%;
   height: 100%;
-}
-
-main .userChoice img:hover {
-  -webkit-filter: drop-shadow(3px 0 0 #101564);
-          filter: drop-shadow(3px 0 0 #101564);
+  -webkit-filter: drop-shadow(2px 2px 2px #101564);
+          filter: drop-shadow(2px 2px 2px #101564);
 }
