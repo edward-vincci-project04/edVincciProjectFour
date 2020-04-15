@@ -267,6 +267,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  background: #80DEEA;
+}
+
 img {
   display: block;
 }
@@ -277,8 +281,91 @@ ul, ol, li {
   list-style: none;
 }
 
+button {
+  padding: 0;
+  border: none;
+  margin: 0;
+  background: none;
+}
+
 .wrapper {
   max-width: 1260px;
   width: 80%;
   margin: 0 auto;
+}
+
+main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 100vh;
+}
+
+main .wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  max-width: 700px;
+}
+
+main .landingContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  border-radius: 40px;
+  margin: auto 0;
+  width: 100%;
+  background: #f6f6f6;
+}
+
+main .userChoice {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+main .userChoice li {
+  width: 100px;
+  -webkit-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+}
+
+main .userChoice li:hover {
+  -webkit-transform: scale(1.2) rotate(20deg);
+          transform: scale(1.2) rotate(20deg);
+}
+
+main .userChoice img {
+  width: 100%;
+  height: 100%;
+  -webkit-filter: drop-shadow(2px 2px 2px #101564);
+          filter: drop-shadow(2px 2px 2px #101564);
 }
