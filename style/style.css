@@ -316,7 +316,7 @@ button {
 
 .userChoiceMini {
   border-radius: 50px;
-  width: 15%;
+  width: 12%;
   background: #f6f6f6;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -334,6 +334,7 @@ button {
 
 .userChoiceMini li {
   width: 100px;
+  padding: 5px 0;
   -webkit-transition: all 0.2s ease-in;
   transition: all 0.2s ease-in;
 }
