@@ -14,7 +14,7 @@
   Initial travel list to work with (subject to change and/or grow):
   Bali, Indonesia
   Kerry, Ireland
-  The Maldives
+  Male, The Maldives
   Waikato, New Zealand
   McMurdo Station, Antarctica
   Bridgetown, Barbados
@@ -34,20 +34,88 @@
  * 
  */
 
-
+// Namespace init
 const vacayApp = {};
 
+// variables
 vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
+vacayApp.hereURL = `https:weather.ls.hereapi.com/weather/1.0/report.json`
+vacayApp.destinations = ["Bali", "Kerry", "Male", "Waikato", "Mcmurdo Station", "Bridgetown", "Providencia", "Reykjavik", "Kyoto", "Tromso"];
+
+
+  $("#weatherSelector").on("click", function () { //placeholder code
+    const selection = mild; // may need to change depending on how html is structured. not sure if this'll work by as displayVacay is already taking a parameter. If i give it another will the call below work. need to test this once we have some html going. Ask Vincci as well
+    vacayApp.displayVacay(selection);
+  });
+
+
+
+// loop through destinations individually to feed into ajax
+vacayApp.destinationsCycle = () => {
+  vacayApp.destinations.forEach((location) => {
+    // console.log(location);
+    vacayApp.getDestWeather(location);
+  });
+};
+
+// ajax call to run our cities through to get the array data from.
+vacayApp.getDestWeather = (input) => {
+  $.ajax({
+    url: vacayApp.hereURL,
+    method: "GET",
+    dataType: "json",
+    data: {
+      apiKey: vacayApp.hereApiKey,
+      product: "observation",
+      name: input
+    }
+  }).then((result) => {
+    // console.log(result);
+    const vacayArray = result.observations.location[0];
+    // console.log(vacayArray); 
+    vacayApp.displayVacay(vacayArray);
+  });
+};
+
+// display the vacations onto the page 
+vacayApp.displayVacay = (vacay, test) => {
+    // console.log("vacations", vacay);
+    // display city
+    const city = vacay.city;
+    // console.log(city);
+    // disp country
+    const country = vacay.country;
+    // console.log(country);
+    // disp weather
+    const temp = Math.floor(vacay.observation[0].highTemperature);
+    // console.log(temp);
+
+    // Weather api has a weather description which can be helpful for our needs
+    const tempDesc = vacay.observation[0].temperatureDesc
+    // console.log(tempDesc);
+
+    // printing a nice statement for testing.
+    console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}. ${test}`)
+
+  // if statements to populate list to user
+
+    
+
+    // need to append the above to the html when that portion has been completed
+}
+
+
+
 
 // -------------------
 // init
 // -------------------
 vacayApp.init = () => {
-
+  vacayApp.destinationsCycle()
 }
 // -------------------
 // doc ready
 // -------------------
 $(()=> {
-    console.log('doc ready test');
+  vacayApp.destinationsCycle();  
 })
