@@ -42,11 +42,24 @@ vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
 vacayApp.hereURL = `https:weather.ls.hereapi.com/weather/1.0/report.json`
 vacayApp.destinations = ["Bali", "Kerry", "Male", "Waikato", "Mcmurdo Station", "Bridgetown", "Providencia", "Reykjavik", "Kyoto", "Tromso"];
 
+let userSelect;
 
-  $("#weatherSelector").on("click", function () { //placeholder code
-    const selection = mild; // may need to change depending on how html is structured. not sure if this'll work by as displayVacay is already taking a parameter. If i give it another will the call below work. need to test this once we have some html going. Ask Vincci as well
-    vacayApp.displayVacay(selection);
-  });
+// user select portion
+$(".imgSelection").on("click", function () { //placeholder code
+  // const selection = "mild"; // for testing purposes
+  const selection = $this.val(); // .val may need to be changed.
+
+  return userSelect = selection; // pushing value of user selection to empty variable to use later.
+
+});
+
+//on button click confirm, run entire program
+
+$(".confirm").on("click", function () { 
+  vacayApp.destinationsCycle();
+
+});
+
 
 
 
@@ -73,12 +86,13 @@ vacayApp.getDestWeather = (input) => {
     // console.log(result);
     const vacayArray = result.observations.location[0];
     // console.log(vacayArray); 
-    vacayApp.displayVacay(vacayArray);
+    vacayApp.displayVacay(vacayArray, userSelect);
   });
 };
 
 // display the vacations onto the page 
-vacayApp.displayVacay = (vacay, test) => {
+vacayApp.displayVacay = (vacay, userSelection) => { //this needs to take data from two different places
+    // console.log(test);
     // console.log("vacations", vacay);
     // display city
     const city = vacay.city;
@@ -95,11 +109,16 @@ vacayApp.displayVacay = (vacay, test) => {
     // console.log(tempDesc);
 
     // printing a nice statement for testing.
-    console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}. ${test}`)
+    console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}.`)
 
-  // if statements to populate list to user
 
-    
+     // if statements to populate list to user
+    // below is testing. needs updating on html completion
+    if (userSelection === "mild" && temp < 25) {
+      console.log("it's warm");
+    } else {
+      console.log("this broke");
+    }    
 
     // need to append the above to the html when that portion has been completed
 }
@@ -117,5 +136,5 @@ vacayApp.init = () => {
 // doc ready
 // -------------------
 $(()=> {
-  vacayApp.destinationsCycle();  
+  // vacayApp.destinationsCycle();  
 })
