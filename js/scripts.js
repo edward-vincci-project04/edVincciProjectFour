@@ -55,30 +55,20 @@ const vacayApp = {};
 vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
 vacayApp.hereURL = `https:weather.ls.hereapi.com/weather/1.0/report.json`
 vacayApp.destinations = ["Bali", "Kerry", "Male", "Waikato", "Mcmurdo Station", "Bridgetown", "Providencia", "Reykjavik", "Kyoto", "Tromso"];
-
-let userSelect;
+vacayApp.userSelect;
 
 // user select portion
 $(".imgSelection").on("click", function () { //placeholder code
   // const selection = "mild"; // for testing purposes
-  const selection = $this.val(); // .val may need to be changed.
+  // const selection = $this.val(); // .val may need to be changed.
 
-  return userSelect = selection; // pushing value of user selection to empty variable to use later.
-
-});
-
-//on button click confirm, run entire program
-
-$(".confirm").on("click", function () { 
+  vacayApp.userSelect = "hot"; // pushing value of user selection to empty variable to use later.
   vacayApp.destinationsCycle();
-
 });
-
-
-
 
 // loop through destinations individually to feed into ajax
-vacayApp.destinationsCycle = () => {
+vacayApp.destinationsCycle = () => { 
+  console.log(vacayApp.userSelect);
   vacayApp.destinations.forEach((location) => {
     // console.log(location);
     vacayApp.getDestWeather(location);
@@ -100,7 +90,7 @@ vacayApp.getDestWeather = (input) => {
     // console.log(result);
     const vacayArray = result.observations.location[0];
     // console.log(vacayArray); 
-    vacayApp.displayVacay(vacayArray, userSelect);
+    vacayApp.displayVacay(vacayArray, vacayApp.userSelect);
   });
 };
 

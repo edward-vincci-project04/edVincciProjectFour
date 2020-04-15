@@ -10,25 +10,26 @@
 
     <header>
         <!-- some sort of nav? -->
-        <nav>
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+        <nav class="landingContainerMini">
+            <ul class="userChoiceMini">
+                <!-- hidden, minied version of main list -->
+                <!-- use js fadeout and in to switch them out. -->
+                <li><button><img src="./assets/cold.png" alt="cold destinations"></button></li>
+                <li><button><img src="./assets/warm.png" alt="warm destinations"></button></li>
+                <li><button><img src="./assets/hot.png" alt="hot destinations"></button></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <div class="wrapper">
-            <div class="landingContainer">
+            <div class="landingContainer" id="move">
                 <h1>Vacation Suggestions</h1> <!-- feel free to think of a better h1 and h3 -->
                 <h3>choose a destination temperature:</h3>
                 <ul class="userChoice">
                     <!-- add js to button to display cities -->
                     <!-- maybe this ul should be in our header nav bar? -->
-                    <li><button><img src="./assets/cold.png" alt="cold destinations"></button></li>
+                    <li><button class="imgSelection"><img src="./assets/cold.png" alt="cold destinations"></button></li>
                     <li><button><img src="./assets/warm.png" alt="warm destinations"></button></li>
                     <li><button><img src="./assets/hot.png" alt="hot destinations"></button></li>
                 </ul>
