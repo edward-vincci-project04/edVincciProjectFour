@@ -10,19 +10,20 @@
 
     <header>
         <!-- some sort of nav? -->
-        <nav>
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+        <nav class="landingContainerMini">
+            <ul class="userChoiceMini">
+                <!-- hidden, minied version of main list -->
+                <!-- use js fadeout and in to switch them out. -->
+                <li><button><img src="./assets/cold.png" alt="cold destinations"></button></li>
+                <li><button><img src="./assets/warm.png" alt="warm destinations"></button></li>
+                <li><button><img src="./assets/hot.png" alt="hot destinations"></button></li>
             </ul>
         </nav>
     </header>
 
     <main>
         <div class="wrapper">
-            <div class="landingContainer">
+            <div class="landingContainer" id="move">
                 <h1>Vacation Suggestions</h1> <!-- feel free to think of a better h1 and h3 -->
                 <h3>choose a destination temperature:</h3>
                 <ul class="userChoice">
@@ -44,6 +45,51 @@
             </div>
         </div>
     </section>
+    
+    <section>
+        <div class="wrapper">
+            <!-- Forecast section -->
+            <!-- custom js slider here? -->
+            <ul class="fiveDayForecast">
+                <!-- imgs to be added via js for more control on how they appear -->
+                <!-- Use an append using weather data from api -->
+                <!-- Here.com api has a forecast_7days_simple 'product' parameter we can use to pull just the weather for the cities as needed. If we remove simple it'll give morning, aft, even weather as well which may be too much info?  -->
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <!-- Map section, use JS to append to the class -->
+        <div class="wrapper">
+            <div class="map"></div>
+        </div>
+    </section>
+
+    <section>
+        <div class="wrapper">
+            <!-- Restaurant stretch goal section -->
+            <!-- custom js slider here? -->
+            <ul class="restaurants"> 
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+            </ul>
+        </div>
+    </section>
+
+    <section>
+        <!-- hotel stretch goal section -->
+        <div class="wrapper">
+            <div class="hotels"></div>
+        </div>
+    </section>
+
     
 
     <script src='https://code.jquery.com/jquery-3.4.0.min.js' integrity='sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=' crossorigin='anonymous'></script>
