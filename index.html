@@ -29,14 +29,23 @@
                 <ul class="userChoice">
                     <!-- add js to button to display cities -->
                     <!-- maybe this ul should be in our header nav bar? -->
-                    <li><button class="imgSelection"><img src="./assets/cold.png" alt="cold destinations"></button></li>
-                    <li><button><img src="./assets/warm.png" alt="warm destinations"></button></li>
-                    <li><button><img src="./assets/hot.png" alt="hot destinations"></button></li>
+                    <li><button class="imgSelection" value="Cool"><img src="./assets/cold.png" alt="cold destinations"></button></li>
+                    <li><button class="imgSelection" value="Mild"><img src="./assets/warm.png" alt="warm destinations"></button></li>
+                    <li><button class="imgSelection" value="Warm"><img src="./assets/hot.png" alt="hot destinations"></button></li>
                 </ul>
             </div>
         </div>
     </main>
 
+    <section class="resultsContainer">
+        <div class="wrapper">
+            <h3 class="userSelected"></h3>
+            <div class="displayResults">
+                <!-- append results here -->
+            </div>
+        </div>
+    </section>
+    
     <section>
         <div class="wrapper">
             <!-- Forecast section -->
