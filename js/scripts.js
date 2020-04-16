@@ -63,7 +63,6 @@ vacayApp.destinationsCycle = () => {
         vacayApp.weatherPromise(location[0], "observation").then( (result) => {
             const vacayArray = result.observations.location[0];
             vacayApp.displayVacay(vacayArray, vacayApp.userSelect, location[1]);
-            
         });
     });
 };
@@ -92,7 +91,10 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         
         // vacayApp.mapPromise(city).then( (result) => {
         //     // trying to display map image but the responseText is literally an image. don't know how to use it
+        //     console.log(result);
+        // use mapPromise endpoint as img src
         // });
+        // console.log(vacayApp.mapPromise(city));
         
         vacayApp.weatherPromise(city, "forecast_7days").then( (result) => {
             const forecastsArray = result.forecasts.forecastLocation.forecast;
@@ -134,7 +136,7 @@ vacayApp.getDestWeather = (input) => {
     });
 };
 
-// is it possible to make above more reusable by saving into promise?n
+// is it possible to make above more reusable by saving into promise?
 vacayApp.weatherPromise = (city, product) => {
     return $.ajax({
         url: vacayApp.hereURL,
@@ -182,7 +184,7 @@ vacayApp.init = () => {
         // scroll down to content and show hidden nav
         $('html, body').animate({
             scrollTop: $('.resultsContainer').offset().top,
-        }, 300, 'linear');
+        }, 700, 'linear');
         // $(nav).show();
     });
 }
