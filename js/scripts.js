@@ -58,7 +58,6 @@ vacayApp.userSelect;
 // loop through destinations individually to feed into ajax
 vacayApp.destinationsCycle = () => {
     vacayApp.destinations.forEach((location) => {
-    // console.log(location);
         vacayApp.getDestWeather(location);
     });
 };
@@ -75,44 +74,44 @@ vacayApp.getDestWeather = (input) => {
             name: input
         }
     }).then((result) => {
-        // console.log(result);
         const vacayArray = result.observations.location[0];
-        // console.log(vacayArray); 
         vacayApp.displayVacay(vacayArray, vacayApp.userSelect);
     });
 };
 
 // display the vacations onto the page 
 vacayApp.displayVacay = (vacay, userSelection) => { //this needs to take data from two different places
-    // console.log(test);
-    // console.log("vacations", vacay);
     // display city
     const city = vacay.city;
-    // console.log(city);
     // disp country
     const country = vacay.country;
-    // console.log(country);
     // disp weather
     const temp = Math.floor(vacay.observation[0].highTemperature);
-    // console.log(temp);
-
     // Weather api has a weather description which can be helpful for our needs
-    const tempDesc = vacay.observation[0].temperatureDesc
-    // console.log(tempDesc);
+    const tempDesc = vacay.observation[0].temperatureDesc;
 
-    // printing a nice statement for testing.
-    console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}.`)
-
-
-     // if statements to populate list to user
+    // if statements to populate list to user
     // below is testing. needs updating on html completion
-    if (userSelection === "mild" && temp < 25) {
-        console.log("it's warm");
-    } else {
-        console.log("this broke");
-    }    
+    if (userSelection === tempDesc ||
+    userSelection === "Cool" && tempDesc === "Cool" ||
+    userSelection === "Cool" && tempDesc === "Refreshingly cool" ||
+    userSelection === "Cool" && tempDesc === "Quite cool" ||
+    userSelection === "Cool" && tempDesc === "Frigid" ||
+    userSelection === "Cool" && tempDesc === "Chilly") {
+        // console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}.`);
+        // need to append the above to the html when that portion has been completed
+        const resultsHtml = `
+            <button class="${city} ${country}">${city}, ${country}</button>
+            <p>The current high temperature is ${temp}</p>`;
+        
+        $(".displayResults").append(resultsHtml);
 
-    // need to append the above to the html when that portion has been completed
+    } else if (userSelection != tempDesc) {
+        // nothing happens if the temperature doesn't matech the selected temp
+    } else {
+        console.log("FUUUUCCCK"); // error
+    }
+
 }
 
 
@@ -123,11 +122,19 @@ vacayApp.displayVacay = (vacay, userSelection) => { //this needs to take data fr
 // -------------------
 vacayApp.init = () => {
     // user select portion
-    $(".imgSelection").on("click", function () { //placeholder code
-        // const selection = "mild"; // for testing purposes
-        vacayApp.userSelect = $(this).val(); // pushing value of user selection to empty variable to use later.
+    $(".imgSelection").on("click", function () {
+        
+        vacayApp.userSelect = $(this).val();
         vacayApp.destinationsCycle();
-        console.log(vacayApp.userSelect)
+        
+        $(".displayResults").empty();
+        $(".userSelected").text(`${vacayApp.userSelect} Places:`);
+
+        // scroll down to content and show hidden nav
+        $('html, body').animate({
+            scrollTop: $('.resultsContainer').offset().top,
+        }, 300, 'linear');
+        // $(nav).show();
     });
 }
 // -------------------
