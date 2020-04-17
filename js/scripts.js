@@ -98,7 +98,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         
         vacayApp.weatherPromise(city, "forecast_7days").then( (result) => {
             const forecastsArray = result.forecasts.forecastLocation.forecast;
-            console.log(forecastsArray);
+            // console.log(forecastsArray);
             
             // Povidencia is 26C but is cool. ???
             const resultsHtml = `
@@ -172,20 +172,43 @@ vacayApp.mapPromise = (city) => {
 // init
 // -------------------
 vacayApp.init = () => {
+    $("main").hide();
+    // $(".sideNav").fadeIn(); //testing purposes
     // user select portion
     $(".imgSelection").on("click", function() {
-        
+        $("main").show();
+        $(".sideNav").fadeIn();
+
         vacayApp.userSelect = $(this).val();
         vacayApp.destinationsCycle();
+        // dynamic hover color on <a> tags: 
+
+        $("a").hover( function(e) {
+            let dynamicColor = '';
+            
+            if (vacayApp.userSelect === "Cool") {
+                dynamicColor = '#69CDE7';
+            } else if (vacayApp.userSelect === "Mild") {
+                dynamicColor = '#F8971D';
+            } else if (vacayApp.userSelect === "Warm") {
+                dynamicColor = '#ED2024';
+            }
+            
+            $(this).css("border-bottom", `2px solid ${e.type === "mouseenter"?`${dynamicColor}`:"transparent"}`);
+        });
         
+        // dynamic color for nav line:
+        // can't use $(".pageNav::after").css(); because jQ can't select ::after
+        $(".pageNav").removeClass().addClass("pageNav")
+            .toggleClass(`nav${vacayApp.userSelect}`);
+
         $(".displayResults").empty();
         $(".userSelected").text(`${vacayApp.userSelect} Places:`);
 
         // scroll down to content and show hidden nav
         $('html, body').animate({
             scrollTop: $('.resultsContainer').offset().top,
-        }, 700, 'linear');
-        // $(nav).show();
+        }, 300, 'linear');
     });
 }
 // -------------------
