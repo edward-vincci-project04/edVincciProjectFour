@@ -81,9 +81,9 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     // Weather api has a weather description which can be helpful for our needs
     const tempDesc = vacay.observation[0].temperatureDesc;
     // Latitude of city
-    const cityLat = vacay.observation[0].latitude
+    vacayApp.cityLat = vacay.observation[0].latitude
     // Longitude of city
-    const cityLong = vacay.observation[0].longitude
+    vacayApp.cityLong = vacay.observation[0].longitude
 
     // if statements to populate list to user
     // below is testing. needs updating on html completion
@@ -96,21 +96,18 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         // console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}.`);
         // need to append the above to the html when that portion has been completed
         
-        vacayApp.mapPromise(city)
-        .then( (result) => {
-            // trying to display map image but the responseText is literally an image. don't know how to use it
-            console.log(result);
-        // use mapPromise endpoint as img src
+        // vacayApp.mapPromise(city)
+        // .then( (result) => {
+        //     // trying to display map image but the responseText is literally an image. don't know how to use it
+        //     console.log(result);
+        // // use mapPromise endpoint as img src
 
-        // console.log(vacayApp.mapPromise(city));
-        
+        // // console.log(vacayApp.mapPromise(city));
 
-
-        
-        }).fail ( (err1, err2) => {
-          console.log("fack", err1);
-          console.log("shiet", err2);
-        });
+        // }).fail ( (err1, err2) => {
+        //   console.log("fack", err1);
+        //   console.log("shiet", err2);
+        // });
         
         vacayApp.weatherPromise(city, "forecast_7days")
         .then( (result) => {
@@ -120,9 +117,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             
             // Povidencia is 26C but is cool. ???
             const resultsHtml = `
-                <button class="${city} ${country} testing">${city}, ${country}</button>
-                
-                
+                <button id ="${city}" class="${country} testing">${city}, ${country}</button>                
                 <p>The current average temperature is ${temp}</p>
                 <p>${cityInfo}</p>`;
 
@@ -131,17 +126,37 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             
             $(".displayResults").append(resultsHtml);
 
-
+            //need to call the click function b/c you can't select the class of the appended elements above otherwise. Solved by moving class of city to an ID to make it unique to grab via attr.
+            vacayApp.click();
+            // vacayApp.mapInit();
         });
 
     } else if (userSelection != tempDesc) {
-        // nothing happens if the temperature doesn't matech the selected temp
+        // nothing happens if the temperature doesn't match the selected temp
     } else {
         console.log("type while (safi is old) console.log('fuuuuuck')"); // error
     }
-
 }
 
+
+// we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
+vacayApp.click = () => {
+  $(".testing").on("click", function() {
+    testClick = $(this).attr("id");
+    console.log(testClick);
+
+    vacayApp.weatherPromise(testClick, "observation")
+    .then( (result) => {
+      console.log(result);
+
+    })
+    
+    })
+
+    // vacayApp.mapInit(vacayApp.cityLat, vacayApp.cityLong);
+    // vacayApp.moveMap(vacayApp.cityLat, vacayApp.cityLong);
+    // console.log("it worked!")
+}
 
 // ajax call to run our cities through to get the array data from.
 vacayApp.getDestWeather = (input) => {
@@ -178,27 +193,27 @@ vacayApp.weatherPromise = (city, product) => {
 
 // maps promise for later.
 // maybe we should cut the map. they look so ugly
-vacayApp.mapPromise = (city) => {
-    return $.ajax({
-        url: vacayApp.hereMapURL,
-        method: "GET",
-        dataType: "json",
-        data: {
-            apiKey: vacayApp.hereApiKey,
-            ci: city,
-            // lat: latitude,
-            // lon: longitude,
-            // vt: "0",
-            // z: "14"
-        }
-    });
-  }
+// vacayApp.mapPromise = (city) => {
+//     return $.ajax({
+//         url: vacayApp.hereMapURL,
+//         method: "GET",
+//         dataType: "json",
+//         data: {
+//             apiKey: vacayApp.hereApiKey,
+//             ci: city,
+//             // lat: latitude,
+//             // lon: longitude,
+//             // vt: "0",
+//             // z: "14"
+//         }
+//     });
+//   }
 
 
 // below code is directly from here.com api docs modifications done as necessary
 
 // call below to init the map
-vacayApp.mapTest = (latt, long) => { 
+vacayApp.mapInit = (latt, long) => { 
 
   const platform = new H.service.Platform({
     apikey: vacayApp.hereApiKey
