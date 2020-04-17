@@ -37,10 +37,10 @@
 // Namespace init
 const vacayApp = {};
 
-// variables
+// constiables
 vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
 vacayApp.hereURL = `https:weather.ls.hereapi.com/weather/1.0/report.json`;
-vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/`;
+vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/mapview`;
 vacayApp.userSelect;
 vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
@@ -60,7 +60,8 @@ vacayApp.destinationsCycle = () => {
     vacayApp.destinations.forEach((location) => {
         // vacayApp.getDestWeather(location[0]);
         // replaced above with more reusable promise
-        vacayApp.weatherPromise(location[0], "observation").then( (result) => {
+        vacayApp.weatherPromise(location[0], "observation")
+        .then( (result) => {
             const vacayArray = result.observations.location[0];
             vacayApp.displayVacay(vacayArray, vacayApp.userSelect, location[1]);
         });
@@ -69,6 +70,8 @@ vacayApp.destinationsCycle = () => {
 
 // display the vacations onto the page 
 vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to take data from two different places
+
+  // console.log(vacay);
     // display city
     const city = vacay.city;
     // disp country
@@ -77,6 +80,10 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     const temp = Math.floor((parseInt(vacay.observation[0].highTemperature) + parseInt(vacay.observation[0].lowTemperature)) / 2);
     // Weather api has a weather description which can be helpful for our needs
     const tempDesc = vacay.observation[0].temperatureDesc;
+    // Latitude of city
+    const cityLat = vacay.observation[0].latitude
+    // Longitude of city
+    const cityLong = vacay.observation[0].longitude
 
     // if statements to populate list to user
     // below is testing. needs updating on html completion
@@ -89,24 +96,42 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         // console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}.`);
         // need to append the above to the html when that portion has been completed
         
-        // vacayApp.mapPromise(city).then( (result) => {
-        //     // trying to display map image but the responseText is literally an image. don't know how to use it
-        //     console.log(result);
+        vacayApp.mapPromise(city)
+        .then( (result) => {
+            // trying to display map image but the responseText is literally an image. don't know how to use it
+            console.log(result);
         // use mapPromise endpoint as img src
-        // });
+
         // console.log(vacayApp.mapPromise(city));
         
-        vacayApp.weatherPromise(city, "forecast_7days").then( (result) => {
+
+
+        
+        }).fail ( (err1, err2) => {
+          console.log("fack", err1);
+          console.log("shiet", err2);
+        });
+        
+        vacayApp.weatherPromise(city, "forecast_7days")
+        .then( (result) => {
+          // console.log(result);
             const forecastsArray = result.forecasts.forecastLocation.forecast;
-            console.log(forecastsArray);
+            // console.log(forecastsArray);
             
             // Povidencia is 26C but is cool. ???
             const resultsHtml = `
-                <button class="${city} ${country}">${city}, ${country}</button>
+                <button class="${city} ${country} testing">${city}, ${country}</button>
+                
+                
                 <p>The current average temperature is ${temp}</p>
                 <p>${cityInfo}</p>`;
+
+                //static map as a fall back 
+                // <img src="https://image.maps.ls.hereapi.com/mia/1.6/?apiKey=${vacayApp.hereApiKey}&ci=${city}&nocp" alt="" class="mapHidden">
             
             $(".displayResults").append(resultsHtml);
+
+
         });
 
     } else if (userSelection != tempDesc) {
@@ -116,6 +141,10 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     }
 
 }
+
+$(".testing").click(function() {
+  $("img").toggle();
+})
 
 
 // ajax call to run our cities through to get the array data from.
@@ -160,11 +189,58 @@ vacayApp.mapPromise = (city) => {
         dataType: "json",
         data: {
             apiKey: vacayApp.hereApiKey,
-            ci: city
+            ci: city,
+            // lat: latitude,
+            // lon: longitude,
+            // vt: "0",
+            // z: "14"
         }
     });
+  }
+
+
+// below code is directly from here.com api docs modifications done as necessary
+
+function moveMapToBerlin(map, latt, long) {
+  map.setCenter({ lat: latt, lng: long });
+  map.setZoom(14);
+  
 }
 
+//Step 1: initialize communication with the platform
+// In your own code, replace constiable window.apikey with your own apikey
+const platform = new H.service.Platform({
+  apikey: vacayApp.hereApiKey
+});
+const defaultLayers = platform.createDefaultLayers();
+
+//Step 2: initialize a map - this map is centered over Europe
+
+vacayApp.mapTest = (latt, long) => {
+  // need to empty it for testing as it duplicates if you dont
+  $("#map").empty();
+  const map = new H.Map(document.getElementById('map'),
+    defaultLayers.vector.normal.map, {
+    center: { lat: latt, lng: long },
+    zoom: 4,
+    pixelRatio: window.devicePixelRatio || 1
+  });
+  // add a resize listener to make sure that the map occupies the whole container
+  window.addEventListener('resize', () => map.getViewPort().resize());
+  
+  //Step 3: make the map interactive
+  // MapEvents enables the event system
+  // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+  const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+  
+  // Create the default UI components
+  const ui = H.ui.UI.createDefault(map, defaultLayers);
+
+  // ndow.onload = function () {
+    moveMapToBerlin(map, latt, long);
+    
+  
+}    
 
 
 
@@ -193,4 +269,5 @@ vacayApp.init = () => {
 // -------------------
 $(()=> {
     vacayApp.init();
+
 })
