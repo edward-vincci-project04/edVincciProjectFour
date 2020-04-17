@@ -142,10 +142,6 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 
 }
 
-$(".testing").click(function() {
-  $("img").toggle();
-})
-
 
 // ajax call to run our cities through to get the array data from.
 vacayApp.getDestWeather = (input) => {
@@ -201,46 +197,39 @@ vacayApp.mapPromise = (city) => {
 
 // below code is directly from here.com api docs modifications done as necessary
 
-function moveMapToBerlin(map, latt, long) {
-  map.setCenter({ lat: latt, lng: long });
-  map.setZoom(14);
-  
-}
+// call below to init the map
+vacayApp.mapTest = (latt, long) => { 
 
-//Step 1: initialize communication with the platform
-// In your own code, replace constiable window.apikey with your own apikey
-const platform = new H.service.Platform({
-  apikey: vacayApp.hereApiKey
-});
-const defaultLayers = platform.createDefaultLayers();
+  const platform = new H.service.Platform({
+    apikey: vacayApp.hereApiKey
+  });
+  const defaultLayers = platform.createDefaultLayers();
 
-//Step 2: initialize a map - this map is centered over Europe
-
-vacayApp.mapTest = (latt, long) => {
   // need to empty it for testing as it duplicates if you dont
   $("#map").empty();
-  const map = new H.Map(document.getElementById('map'),
+  vacayApp.map = new H.Map(document.getElementById('map'),
     defaultLayers.vector.normal.map, {
     center: { lat: latt, lng: long },
     zoom: 4,
     pixelRatio: window.devicePixelRatio || 1
   });
-  // add a resize listener to make sure that the map occupies the whole container
-  window.addEventListener('resize', () => map.getViewPort().resize());
+
+  window.addEventListener('resize', () => vacayApp.map.getViewPort().resize());
   
-  //Step 3: make the map interactive
-  // MapEvents enables the event system
-  // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
-  const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+  const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(vacayApp.map));
   
   // Create the default UI components
-  const ui = H.ui.UI.createDefault(map, defaultLayers);
+  const ui = H.ui.UI.createDefault(vacayApp.map, defaultLayers);
 
-  // ndow.onload = function () {
-    moveMapToBerlin(map, latt, long);
-    
-  
-}    
+
+}  
+
+// call this to move the map
+vacayApp.moveMap = (latt, long) => {
+  vacayApp.map.setCenter({ lat: latt, lng: long });
+  vacayApp.map.setZoom(14);
+}
+
 
 
 
