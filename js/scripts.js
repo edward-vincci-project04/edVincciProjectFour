@@ -135,11 +135,9 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 vacayApp.click = () => {
   $(".testing").on("click", function() {
     testClick = $(this).attr("id");
-    console.log(testClick);
 
     vacayApp.weatherPromise(testClick, "observation")
     .then( (result) => {
-        console.log(result);
         const lat = result.observations.location[0].latitude;
         const long = result.observations.location[0].longitude;
         vacayApp.moveMap(lat, long)
