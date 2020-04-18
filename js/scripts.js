@@ -71,7 +71,6 @@ vacayApp.destinationsCycle = () => {
 // display the vacations onto the page 
 vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to take data from two different places
 
-  // console.log(vacay);
     // display city
     const city = vacay.city;
     // disp country
@@ -80,10 +79,6 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     const temp = Math.floor((parseInt(vacay.observation[0].highTemperature) + parseInt(vacay.observation[0].lowTemperature)) / 2);
     // Weather api has a weather description which can be helpful for our needs
     const tempDesc = vacay.observation[0].temperatureDesc;
-    // Latitude of city
-    vacayApp.cityLat = vacay.observation[0].latitude
-    // Longitude of city
-    vacayApp.cityLong = vacay.observation[0].longitude
 
     // if statements to populate list to user
     // below is testing. needs updating on html completion
@@ -93,8 +88,6 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     userSelection === "Cool" && tempDesc === "Quite cool" ||
     userSelection === "Cool" && tempDesc === "Frigid" ||
     userSelection === "Cool" && tempDesc === "Chilly") {
-        // console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}.`);
-        // need to append the above to the html when that portion has been completed
         
         // vacayApp.mapPromise(city)
         // .then( (result) => {
@@ -111,9 +104,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         
         vacayApp.weatherPromise(city, "forecast_7days")
         .then( (result) => {
-          // console.log(result);
             const forecastsArray = result.forecasts.forecastLocation.forecast;
-            // console.log(forecastsArray);
             
             // Povidencia is 26C but is cool. ???
             const resultsHtml = `
@@ -127,8 +118,8 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             $(".displayResults").append(resultsHtml);
 
             //need to call the click function b/c you can't select the class of the appended elements above otherwise. Solved by moving class of city to an ID to make it unique to grab via attr.
+            // we could move this click to the map nav along with initializing the map so it only runs once instead of repeating on every click here
             vacayApp.click();
-            // vacayApp.mapInit();
         });
 
     } else if (userSelection != tempDesc) {
@@ -140,6 +131,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 
 
 // we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
+// COMPLETED - still need to init map somewhere.
 vacayApp.click = () => {
   $(".testing").on("click", function() {
     testClick = $(this).attr("id");
@@ -147,16 +139,13 @@ vacayApp.click = () => {
 
     vacayApp.weatherPromise(testClick, "observation")
     .then( (result) => {
-      console.log(result);
-
-    })
-    
-    })
-
-    // vacayApp.mapInit(vacayApp.cityLat, vacayApp.cityLong);
-    // vacayApp.moveMap(vacayApp.cityLat, vacayApp.cityLong);
-    // console.log("it worked!")
-}
+        console.log(result);
+        const lat = result.observations.location[0].latitude;
+        const long = result.observations.location[0].longitude;
+        vacayApp.moveMap(lat, long)
+      });
+    });
+};
 
 // ajax call to run our cities through to get the array data from.
 vacayApp.getDestWeather = (input) => {
@@ -191,6 +180,8 @@ vacayApp.weatherPromise = (city, product) => {
     });
 }
 
+// Below code note needed anymore, leaving for posterity. Delete on final
+
 // maps promise for later.
 // maybe we should cut the map. they look so ugly
 // vacayApp.mapPromise = (city) => {
@@ -211,10 +202,9 @@ vacayApp.weatherPromise = (city, product) => {
 
 
 // below code is directly from here.com api docs modifications done as necessary
-
 // call below to init the map
-vacayApp.mapInit = (latt, long) => { 
-
+vacayApp.mapInit = () => { 
+  // Updated var to const, some namespace was used during testing for better manipulation
   const platform = new H.service.Platform({
     apikey: vacayApp.hereApiKey
   });
@@ -222,10 +212,11 @@ vacayApp.mapInit = (latt, long) => {
 
   // need to empty it for testing as it duplicates if you dont
   $("#map").empty();
+
   vacayApp.map = new H.Map(document.getElementById('map'),
     defaultLayers.vector.normal.map, {
-    center: { lat: latt, lng: long },
-    zoom: 4,
+    center: { lat: 0, lng: 0 },
+    zoom: 1,
     pixelRatio: window.devicePixelRatio || 1
   });
 
@@ -233,20 +224,15 @@ vacayApp.mapInit = (latt, long) => {
   
   const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(vacayApp.map));
   
-  // Create the default UI components
   const ui = H.ui.UI.createDefault(vacayApp.map, defaultLayers);
-
 
 }  
 
 // call this to move the map
 vacayApp.moveMap = (latt, long) => {
   vacayApp.map.setCenter({ lat: latt, lng: long });
-  vacayApp.map.setZoom(14);
+  vacayApp.map.setZoom(13);
 }
-
-
-
 
 // -------------------
 // init
