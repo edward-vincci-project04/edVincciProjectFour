@@ -288,7 +288,7 @@ a {
   font-weight: 400;
   color: #181818;
   text-decoration: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: 5px solid transparent;
   -webkit-transition: all 0.3s ease-in;
   transition: all 0.3s ease-in;
   text-shadow: 1px 1px 0 #f6f6f6;
@@ -327,6 +327,7 @@ button {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  position: relative;
   background: #f6f6f6;
   max-width: 900px;
   width: 80%;
@@ -335,6 +336,10 @@ button {
   border: 10px solid #D6D6D7;
   border-radius: 40px;
   margin: auto 0;
+}
+
+.innerWrapper h3:first-of-type {
+  margin-top: 0;
 }
 
 h1, h2, h3 {
@@ -516,9 +521,21 @@ main .mainContainer {
 }
 
 main h2 {
+  position: relative;
+  top: 0;
   -ms-flex-item-align: start;
       -ms-grid-row-align: start;
       align-self: start;
+  letter-spacing: 2px;
+}
+
+main h2::after {
+  content: '';
+  width: 100%;
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  border-bottom: 5px solid #D6D6D7;
 }
 
 main button {
@@ -537,6 +554,59 @@ main button:hover {
   border-left: 2px solid #D6D6D7;
   border-bottom: 2px solid transparent;
   border-right: 2px solid transparent;
+}
+
+main .innerNav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  position: absolute;
+  top: 0;
+  right: 12px;
+  height: 100%;
+}
+
+main .innerNav li {
+  width: 100%;
+  text-align: right;
+}
+
+main .innerNav button {
+  font-size: 15px;
+  font-size: 1.5rem;
+  font-family: 'Nixie One', serif;
+  font-weight: 400;
+  color: #181818;
+  letter-spacing: 2px;
+  padding: 0;
+  border: 0;
+  margin: 10px 0;
+  border-radius: 0;
+  border-bottom: 3px solid transparent;
+  -webkit-transition-duration: 0.3s;
+          transition-duration: 0.3s;
+}
+
+main .innerNav button:hover {
+  border-bottom: 3px solid #b4f6ff;
+}
+
+main .innerNav::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  height: 100%;
+  border-right: 3px solid #D6D6D7;
 }
 
 main .displayResults {

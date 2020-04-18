@@ -102,11 +102,15 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             
             // Povidencia is 26C but is cool. ???
             const resultsHtml = `
-                <button class="${city} ${country}">${city}, ${country}</button>
+                <h3 class="${city} ${country}">${city}, ${country}</h3>
                 <p>The current average temperature is ${temp}</p>
                 <p>${cityInfo}</p>`;
             
+            const linksHtml = `
+                <li><button class="${country}">${city}</button></li>`;
+
             $(".displayResults").append(resultsHtml);
+            $(".innerNav").append(linksHtml);
         });
 
     } else if (userSelection != tempDesc) {
@@ -194,26 +198,27 @@ vacayApp.init = () => {
                 dynamicColor = '#ED2024';
             }
             
-            $(this).css("border-bottom", `2px solid ${e.type === "mouseenter"?`${dynamicColor}`:"transparent"}`);
+            $(this).css("border-bottom", `5px solid ${e.type === "mouseenter"?`${dynamicColor}`:"transparent"}`);
         });
         
         // dynamic color for nav line:
         // can't use $(".pageNav::after").css(); because jQ can't select ::after
         $(".pageNav").removeClass().addClass("pageNav")
             .toggleClass(`nav${vacayApp.userSelect}`);
-        // on click on 'top' link, hide main and sideNav
-        $("a[href='#']").on('click', () => {
-            $("main").fadeOut();
-            $(".sideNav").fadeOut();
-        });
 
         $(".displayResults").empty();
+        $(".innerNav").empty();
         $(".userSelected").text(`${vacayApp.userSelect} Places:`);
 
         // scroll down to content and show hidden nav
         $('html, body').animate({
             scrollTop: $('.resultsContainer').offset().top,
         }, 300, 'linear');
+    });
+
+    // click listener on innerNav (cities)
+    $(".innerNav").on("click", "button", function() {
+        // show different info for diff cities
     });
 }
 // -------------------

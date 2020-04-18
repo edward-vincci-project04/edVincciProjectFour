@@ -6,7 +6,19 @@ main {
     }
 
     h2 {
+        position: relative;
+        top: 0;
         align-self: start;
+        letter-spacing: 2px;
+        
+        &::after {
+            content: '';
+            width: 100%;
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            border-bottom: 5px solid $secondaryWhite;
+        }
     }
 
     button {
@@ -26,8 +38,48 @@ main {
         }
     }
 
+    .innerNav {
+        @include flexCenter();
+        flex-direction: column;
+
+        position: absolute;
+        top: 0;
+        right: 12px;
+
+        height: 100%;
+
+        li {
+            width: 100%;
+            text-align: right;
+        }
+
+        button {
+            @include fontSerif(15);
+            letter-spacing: 2px;
+            padding: 0;
+            border: 0;
+            margin: 10px 0;
+
+            border-radius: 0;
+            border-bottom: 3px solid transparent;
+            transition-duration: 0.3s;
+
+            &:hover {
+                border-bottom: 3px solid $bgColor;
+            }
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            height: 100%;
+            border-right: 3px solid $secondaryWhite;
+        }
+    }
+// city info section
     .displayResults {
         overflow-x: auto; 
     }
-
+// city info section ends
 }
