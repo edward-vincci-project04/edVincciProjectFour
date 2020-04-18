@@ -201,6 +201,11 @@ vacayApp.init = () => {
         // can't use $(".pageNav::after").css(); because jQ can't select ::after
         $(".pageNav").removeClass().addClass("pageNav")
             .toggleClass(`nav${vacayApp.userSelect}`);
+        // on click on 'top' link, hide main and sideNav
+        $("a[href='#']").on('click', () => {
+            $("main").fadeOut();
+            $(".sideNav").fadeOut();
+        });
 
         $(".displayResults").empty();
         $(".userSelected").text(`${vacayApp.userSelect} Places:`);

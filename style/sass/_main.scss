@@ -15,7 +15,8 @@ main {
         border-left: 2px solid transparent;
         border-bottom: 2px solid $bgColor;
         border-right: 2px solid $bgColor;
-        border-radius: 8px;
+        border-radius: 10px;
+        transition-duration: 0.4s;
 
         &:hover {
             border-top: 2px solid $secondaryWhite;
