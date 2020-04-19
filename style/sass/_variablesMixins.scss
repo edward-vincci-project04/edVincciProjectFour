@@ -1,14 +1,14 @@
 // font colours
-$primaryBlack: #2e2e2e;
-$secondaryBlack: #333333;
+$primaryBlack: #181818;
+$secondaryBlack: #101564;
 $primaryWhite: #f6f6f6;
-$secondaryWhite: #ccc;
+$secondaryWhite: #D6D6D7;
 
 $coldColor: #69CDE7;
-$warmColor: #F8971D;
-$hotColor: #ED2024;
+$mildColor: #F8971D;
+$warmColor: #ED2024;
 
-$bgColor: #80DEEA;
+$bgColor: #b4f6ff;
 
 // mixins
 
@@ -26,16 +26,17 @@ $bgColor: #80DEEA;
     font-size: ($sizeValue/10) * 1rem;
 }
 
-@mixin fontSans($size, $weight: 700, $color: $primaryBlack) {
+@mixin fontSans($size, $color: $primaryBlack) {
     @include fontSize($size);
-    font-family: 'Raleway', sans-serif;
-    font-weight: $weight;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
     color: $color;
 }
 
-@mixin fontSerif($size, $weight: 400, $color: $primaryBlack) {
+@mixin fontSerif($size, $color: $primaryBlack) {
     @include fontSize($size);
-    font-family: 'Lora', serif;
-    font-weight: $weight;
+    font-family: 'Nixie One', serif;
+    font-weight: 400;
     color: $color;
 }
+

@@ -11,56 +11,88 @@
     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
     <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Nixie+One&family=Quicksand:wght@400;700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="./style/style.css">
 </head>
 <body>
 
     <header>
         <!-- some sort of nav? -->
-        <nav class="landingContainerMini">
+        <nav class="sideNav">
             <ul class="userChoiceMini">
                 <!-- hidden, minied version of main list -->
                 <!-- use js fadeout and in to switch them out. -->
-                <li><button><img src="./assets/cold.png" alt="cold destinations"></button></li>
-                <li><button><img src="./assets/warm.png" alt="warm destinations"></button></li>
-                <li><button><img src="./assets/hot.png" alt="hot destinations"></button></li>
+                <li><button class="imgSelection" value="Cool"><img src="./assets/cold.png" alt="cold destinations"></button></li>
+                <li><button class="imgSelection" value="Mild"><img src="./assets/warm.png" alt="warm destinations"></button></li>
+                <li><button class="imgSelection" value="Warm"><img src="./assets/hot.png" alt="hot destinations"></button></li>
+            </ul>
+            <ul class="pageNav">
+                <li><a href="#">top</a></li>
+                <li><a href="#cities">cities</a></li>
+                <li><a href="#forecasts">forecast</a></li>
+                <li><a href="#maps">maps</a></li>
+                <li><a href="#restaurants">food</a></li>
+                <li><a href="#hotels">hotels</a></li>
             </ul>
         </nav>
+        <div class="landingContainer" id="move">
+            <div class="innerWrapper">
+                    <h1>Vacation Suggestions</h1> <!-- feel free to think of a better h1 and h3 -->
+                    <h3>choose a destination temperature:</h3>
+                    <ul class="userChoice">
+                        <!-- add js to button to display cities -->
+                        <!-- maybe this ul should be in our header nav bar? -->
+                        <li><button class="imgSelection" value="Cool"><img src="./assets/cold.png" alt="cold destinations"></button></li>
+                        <li><button class="imgSelection" value="Mild"><img src="./assets/warm.png" alt="warm destinations"></button></li>
+                        <li><button class="imgSelection" value="Warm"><img src="./assets/hot.png" alt="hot destinations"></button></li>
+                    </ul>
+                </div>
+        </div>
     </header>
 
     <main>
-        <div class="wrapper">
-            <div class="landingContainer" id="move">
-                <h1>Vacation Suggestions</h1> <!-- feel free to think of a better h1 and h3 -->
-                <h3>choose a destination temperature:</h3>
-                <ul class="userChoice">
-                    <!-- add js to button to display cities -->
-                    <!-- maybe this ul should be in our header nav bar? -->
-                    <li><button class="imgSelection" value="Cool"><img src="./assets/cold.png" alt="cold destinations"></button></li>
-                    <li><button class="imgSelection" value="Mild"><img src="./assets/warm.png" alt="warm destinations"></button></li>
-                    <li><button class="imgSelection" value="Warm"><img src="./assets/hot.png" alt="hot destinations"></button></li>
+
+        <section class="resultsContainer mainContainer" id="cities">
+            <div class="innerWrapper">
+                <h2 class="userSelected"></h2>
+                <div class="displayResults">
+                    <!-- append results here -->
+                </div>
+            </div>
+        </section>
+        
+        <section class="mainContainer" id="forecasts">
+            <div class="innerWrapper">
+                <ul class="innerNav">
+                    <!-- populate with js line 113 -->
                 </ul>
-            </div>
-        </div>
-    </main>
-
-    <section class="resultsContainer">
-        <div class="wrapper">
-            <h3 class="userSelected"></h3>
-            <div class="displayResults">
-                <!-- append results here -->
-            </div>
-        </div>
-    </section>
-
-        <section>
-            <!-- Map section, use JS to append to the class -->
-            <div class="wrapper">
-                <div style="width: 640px; height: 480px" id="map"></div>
+                <!-- Forecast section -->
+                <!-- custom js slider here? -->
+                <ul class="fiveDayForecast">
+                    <!-- imgs to be added via js for more control on how they appear -->
+                    <!-- Use an append using weather data from api -->
+                    <!-- Here.com api has a forecast_7days_simple 'product' parameter we can use to pull just the weather for the cities as needed. If we remove simple it'll give morning, aft, even weather as well which may be too much info?  -->
+                    <li><img src="" alt=""></li>
+                    <li><img src="" alt=""></li>
+                    <li><img src="" alt=""></li>
+                    <li><img src="" alt=""></li>
+                    <li><img src="" alt=""></li>
+                </ul>
             </div>
         </section>
 
+        <section class="mainContainer" id="maps">
+            <div class="innerWrapper">
+                <ul class="innerNav">
+                    <!-- populate with js line 113 -->
+                </ul>
+                <div class="mapResults">
+                    <!-- Map section, use JS to append to the class -->
+                    <div style="width: 640px; height: 480px" id="map"></div>
+                </div>
+            </div>
+        </div>
+    </section>
     
     <section>
         <div class="wrapper">
@@ -79,26 +111,33 @@
         </div>
     </section>
 
-    <section>
-        <div class="wrapper">
-            <!-- Restaurant stretch goal section -->
-            <!-- custom js slider here? -->
-            <ul class="restaurants"> 
-                <li><img src="" alt=""></li>
-                <li><img src="" alt=""></li>
-                <li><img src="" alt=""></li>
-                <li><img src="" alt=""></li>
-            </ul>
-        </div>
-    </section>
+        <section class="mainContainer" id="restaurants">
+            <div class="innerWrapper">
+                <ul class="innerNav">
+                    <!-- populate with js line 113 -->
+                </ul>
+                <!-- Restaurant stretch goal section -->
+                <!-- custom js slider here? -->
+                <ul class="restaurants"> 
+                    <li><img src="" alt=""></li>
+                    <li><img src="" alt=""></li>
+                    <li><img src="" alt=""></li>
+                    <li><img src="" alt=""></li>
+                </ul>
+            </div>
+        </section>
 
-    <section>
-        <!-- hotel stretch goal section -->
-        <div class="wrapper">
-            <div class="hotels"></div>
-        </div>
-    </section>
+        <section class="mainContainer" id="hotels">
+            <!-- hotel stretch goal section -->
+            <div class="innerWrapper">
+                <ul class="innerNav">
+                    <!-- populate with js line 113 -->
+                </ul>
+                <div class="hotels"></div>
+            </div>
+        </section>
 
+    </main>
     
 
     <script src='https://code.jquery.com/jquery-3.4.0.min.js' integrity='sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=' crossorigin='anonymous'></script>

@@ -8,15 +8,57 @@ ul, ol, li {
     list-style: none;
 }
 
+a {
+    @include fontSerif(14);
+    text-decoration: none;
+
+    border-bottom: 5px solid transparent;
+    transition: all 0.3s ease-in;
+    text-shadow: 1px 1px 0 $primaryWhite;
+
+    &:hover {
+        border-bottom: 5px solid $secondaryWhite;
+    }
+}
+
 button {
+    @include fontSans(14);
+    font-weight: 700;
     padding: 0;
     border: none;
     margin: 0;
     background: none;
+    transition: all 0.3s ease-in;
 }
 
-.wrapper {
-    max-width: 1260px;
-    width: 80%;
-    margin: 0 auto;
+.innerWrapper {
+    @include flexCenter();
+    flex-direction: column;
+    
+    position: relative;
+    background: $primaryWhite;
+
+    max-width: 900px;
+    width: 80%; 
+    height: 80vh;
+    padding: 30px 50px;
+    border: 10px solid $secondaryWhite;
+    border-radius: 40px;
+    margin: auto 0;
+
+    h3:first-of-type {
+        margin-top: 0;
+    }
 }
+
+h1, h2, h3 {
+    @include fontSerif(20);
+}
+
+p {
+    @include fontSans(14);
+    line-height: calc(14 * 1.6px);
+}
+
+// drier code
+// give the userSelect buttons another class to target them globally
