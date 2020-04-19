@@ -108,7 +108,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             
             // Povidencia is 26C but is cool. ???
             const resultsHtml = `
-                <button id ="${city}" class="${country} testing">${city}, ${country}</button>                
+                <button id ="${city}" class="${country} mapGrab">${city}, ${country}</button>                
                 <p>The current average temperature is ${temp}</p>
                 <p>${cityInfo}</p>`;
 
@@ -136,14 +136,19 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 // we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
 // COMPLETED - still need to init map somewhere.
 vacayApp.click = () => {
-  $(".testing").on("click", function() {
-    testClick = $(this).attr("id");
+  $(".mapGrab").on("click", function() {
+    cityClick = $(this).attr("id");
 
-    vacayApp.weatherPromise(testClick, "observation")
+    vacayApp.weatherPromise(cityClick, "observation")
     .then( (result) => {
         const lat = result.observations.location[0].latitude;
         const long = result.observations.location[0].longitude;
+        //move map function
         vacayApp.moveMap(lat, long)
+        // scroll to map area on click
+        $('html, body').animate({
+          scrollTop: $('.mapResults').offset().top,
+        }, 300, 'linear');
       });
     });
 };
@@ -289,5 +294,5 @@ vacayApp.init = () => {
 // -------------------
 $(()=> {
     vacayApp.init();
-
+    vacayApp.mapInit();
 })
