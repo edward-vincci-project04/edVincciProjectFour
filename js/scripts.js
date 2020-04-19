@@ -123,6 +123,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             //need to call the click function b/c you can't select the class of the appended elements above otherwise. Solved by moving class of city to an ID to make it unique to grab via attr.
             // we could move this click to the map nav along with initializing the map so it only runs once instead of repeating on every click here
             vacayApp.click();
+            vacayApp.mapInit();
         });
 
     } else if (userSelection != tempDesc) {
@@ -138,6 +139,11 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 vacayApp.click = () => {
   $(".mapGrab").on("click", function() {
     cityClick = $(this).attr("id");
+  
+    // scroll to map area on click see to be broken as in it bounces around
+    $('html, body').animate({
+      scrollTop: $('.mapResults').offset().top,
+    }, 300, 'linear');
 
     vacayApp.weatherPromise(cityClick, "observation")
     .then( (result) => {
@@ -145,12 +151,13 @@ vacayApp.click = () => {
         const long = result.observations.location[0].longitude;
         //move map function
         vacayApp.moveMap(lat, long)
-        // scroll to map area on click
-        $('html, body').animate({
-          scrollTop: $('.mapResults').offset().top,
-        }, 300, 'linear');
+        
       });
     });
+
+  $(".mapNav").on("click", function() {
+    vacayApp.mapInit();
+  })
 };
 
 // ajax call to run our cities through to get the array data from.
