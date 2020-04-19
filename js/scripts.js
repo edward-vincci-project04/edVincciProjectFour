@@ -154,11 +154,10 @@ vacayApp.click = () => {
         
       });
     });
-
-  $(".mapNav").on("click", function() {
-    vacayApp.mapInit();
-  })
-};
+  };
+    $(".mapNav").on("click", function() {
+      vacayApp.mapInit();
+    })
 
 // ajax call to run our cities through to get the array data from.
 vacayApp.getDestWeather = (input) => {
