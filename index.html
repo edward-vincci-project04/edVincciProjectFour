@@ -47,7 +47,7 @@
 
         <section class="resultsContainer mainContainer" id="cities">
             <div class="innerWrapper">
-                <h2 class="userSelected"></h2>
+                <h2 class="userSelected"><!-- dynamic from js --></h2>
                 <div class="displayResults">
                     <!-- append results here -->
                 </div>
@@ -59,17 +59,13 @@
                 <ul class="innerNav">
                     <!-- populate with js line 113 -->
                 </ul>
+                <h2 class="userSelectedCity"><!-- dynamic from js --></h2>
                 <!-- Forecast section -->
                 <!-- custom js slider here? -->
-                <ul class="fiveDayForecast">
+                <ul class="sevenDayForecast">
                     <!-- imgs to be added via js for more control on how they appear -->
                     <!-- Use an append using weather data from api -->
                     <!-- Here.com api has a forecast_7days_simple 'product' parameter we can use to pull just the weather for the cities as needed. If we remove simple it'll give morning, aft, even weather as well which may be too much info?  -->
-                    <li><img src="" alt=""></li>
-                    <li><img src="" alt=""></li>
-                    <li><img src="" alt=""></li>
-                    <li><img src="" alt=""></li>
-                    <li><img src="" alt=""></li>
                 </ul>
             </div>
         </section>

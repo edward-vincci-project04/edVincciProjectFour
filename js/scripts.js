@@ -80,7 +80,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 
     // if statements to populate list to user
     // below is testing. needs updating on html completion
-    if (userSelection === tempDesc ||
+    if ( userSelection === tempDesc ||
     userSelection === "Cool" && tempDesc === "Cool" ||
     userSelection === "Cool" && tempDesc === "Refreshingly cool" ||
     userSelection === "Cool" && tempDesc === "Quite cool" ||
@@ -95,33 +95,92 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         // use mapPromise endpoint as img src
         // });
         // console.log(vacayApp.mapPromise(city));
+            
+        const resultsHtml = `
+            <h3 class="${city} ${country}">${city}, ${country}</h3>
+            <p>The current average temperature is ${temp}</p>
+            <p>${cityInfo}</p>`;
         
-        vacayApp.weatherPromise(city, "forecast_7days_simple").then( (result) => {
-            const forecastsArray = result.dailyForecasts.forecastLocation.forecast;
-            console.log(city, forecastsArray);
-            
-            const resultsHtml = `
-                <h3 class="${city} ${country}">${city}, ${country}</h3>
-                <p>The current average temperature is ${temp}</p>
-                <p>${cityInfo}</p>`;
-            
-            const linksHtml = `
-                <li><button class="${country}">${city}</button></li>`;
+        const linksHtml = `
+            <li><button class="${country}">${city}</button></li>`;
 
-            $(".displayResults").append(resultsHtml);
-            $(".innerNav").append(linksHtml);
-        }).fail( (err) => {
-            console.log(err);
-        });
+        $(".displayResults").append(resultsHtml);
+        $(".innerNav").append(linksHtml);
+        // set a default for forecasts
+        vacayApp.displayForecasts(city);
 
     } else if (userSelection != tempDesc) {
         // nothing happens if the temperature doesn't matech the selected temp
     } else {
-        console.log("type while (safi is old) console.log('fuuuuuck')"); // error
+        console.log("type while ('safi' != 'old') console.log('fuuuuuck')"); // error
     }
 
 }
 
+vacayApp.displayForecasts = (city) => {
+        
+    vacayApp.weatherPromise(city, "forecast_7days_simple").then( (result) => {
+        const forecastsArray = result.dailyForecasts.forecastLocation.forecast;
+        $(".userSelectedCity").text(city);
+        $(".sevenDayForecast").empty();
+
+        const legendHtml = `
+        <li class="legendColumn dayOfWeek">
+            <ul>
+                <li></li>
+                <li>
+                    <h4>°C</h4>
+                </li>
+                <li>
+                    <h4>UV</h4>
+                </li>
+                <li>
+                    <h4>Wind <span>(km/h)</span></h4>
+                </li>
+                <li></li>
+            </ul>
+        </li>`;
+
+        $(".sevenDayForecast").append(legendHtml);
+
+        // forEach to go through each day and spit out data
+        forecastsArray.forEach( (day) => {
+            const { 
+                description, highTemperature, lowTemperature, skyDescription, uvIndex, utcTime, weekday, windSpeed } =  day;
+            
+            const avgTemp = (parseInt(lowTemperature) + parseInt(highTemperature)) / 2;
+            const windInt = Math.round(parseInt(windSpeed));
+
+            const forecastHtml = `
+                <li class="${weekday}Column dayOfWeek">
+                    <ul>
+                        <li>
+                            <h3>${weekday.substr(0, 3)}</h3>
+                            <p>${utcTime.substr(5, 5)}</p>
+                        </li>
+                        <li>
+                            <h4>${avgTemp}°</h4>
+                        </li>
+                        <li>
+                            <h4>${uvIndex}</h4>
+                        </li>
+                        <li>
+                            <h4>${windInt}</h4>
+                        </li>
+                        <li>
+                            <p>${skyDescription}</p>
+                        </li>
+                    </ul>
+                </li>`;
+    
+            $(".sevenDayForecast").append(forecastHtml);
+            
+        });
+        
+    }).fail( (error) => {
+        console.log(error);
+    });
+}
 
 // ajax call to run our cities through to get the array data from.
 vacayApp.getDestWeather = (input) => {
@@ -171,8 +230,6 @@ vacayApp.mapPromise = (city) => {
 }
 
 
-
-
 // -------------------
 // init
 // -------------------
@@ -186,6 +243,7 @@ vacayApp.init = () => {
 
         vacayApp.userSelect = $(this).val();
         vacayApp.destinationsCycle();
+
         // dynamic hover color on <a> tags: 
 
         $("a").hover( function(e) {
@@ -220,6 +278,8 @@ vacayApp.init = () => {
     // click listener on innerNav (cities)
     $(".innerNav").on("click", "button", function() {
         // show different info for diff cities
+        vacayApp.displayForecasts($(this).text());
+        console.log($(this).text());
     });
 }
 // -------------------
