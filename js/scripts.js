@@ -41,6 +41,9 @@ const vacayApp = {};
 vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
 vacayApp.hereURL = `https:weather.ls.hereapi.com/weather/1.0/report.json`;
 vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/mapview`;
+vacayApp.zomatoApiKey = `b655786c25f1fdb7949ffd2d5bb49eb6`;
+vacayApp.zomatoCityURL =`https://developers.zomato.com/api/v2.1/cities`
+vacayApp.zomatoEstablishmentURL = `https://developers.zomato.com/api/v2.1/establishments`
 vacayApp.userSelect;
 vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
@@ -191,6 +194,41 @@ vacayApp.weatherPromise = (city, product) => {
         }
     });
 }
+
+// need city id to input into ajax to get restaurants
+vacayApp.zomatoCityID = (city) => {
+  return $.ajax({
+    url: vacayApp.zomatoCityURL,
+    method: "GET",
+    dataType: "json",
+    headers: {
+      "user-key": vacayApp.zomatoApiKey
+    },
+    data: {
+      q: city,
+    }
+  }).then ( (result) => {
+    vacayApp.cityID = result.location_suggestions[0].id;
+    vacayApp.zomatoRestaurants(vacayApp.cityID);
+  });
+};
+
+vacayApp.zomatoRestaurants = (cityID) => {
+  return $.ajax({
+    url: vacayApp.zomatoEstablishmentURL,
+    method: "GET",
+    dataType: "json",
+    headers: {
+      "user-key": vacayApp.zomatoApiKey
+    },
+    data: {
+      city_id: cityID,
+    }
+  }).then((result) => {
+    console.log(result);
+    
+  });
+};
 
 // Below code note needed anymore, leaving for posterity. Delete on final
 
