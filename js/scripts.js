@@ -195,7 +195,7 @@ vacayApp.weatherPromise = (city, product) => {
     });
 }
 
-// need city id to input into ajax to get restaurants
+// need city id to input into ajax to get establishments (types of restaurants)
 vacayApp.zomatoCityID = (city) => {
   return $.ajax({
     url: vacayApp.zomatoCityURL,
@@ -209,11 +209,12 @@ vacayApp.zomatoCityID = (city) => {
     }
   }).then ( (result) => {
     vacayApp.cityID = result.location_suggestions[0].id;
-    vacayApp.zomatoRestaurants(vacayApp.cityID);
+    vacayApp.zomatoEstablishment(vacayApp.cityID);
   });
 };
 
-vacayApp.zomatoRestaurants = (cityID) => {
+// establishment types (i.e wine bar, casual dining etc)
+vacayApp.zomatoEstablishment = (cityID) => {
   return $.ajax({
     url: vacayApp.zomatoEstablishmentURL,
     method: "GET",
@@ -226,9 +227,42 @@ vacayApp.zomatoRestaurants = (cityID) => {
     }
   }).then((result) => {
     console.log(result);
+    // need to sort through establishment types and append to html so user can select cuisine type which we feed into the below ajax.
     
   });
 };
+
+// using another ajax call, we use city ID and establishment type (put into a dropdown maybe?) and use that selector to input into another ajax search (below)that will populate restaurants. We can sort it a lot.
+
+vacayApp.zomatoRestaurantSearch = (cityID, establishment) => {
+  return $.ajax({
+    url: vacayApp.zomatoEstablishmentURL,
+    method: "GET",
+    dataType: "json",
+    headers: {
+      "user-key": vacayApp.zomatoApiKey
+    },
+    data: {
+      entity_id: cityID,
+      // seems like below doesn't populate anything in json.
+      // establishment_type: establishment,
+      sort: "rating",
+      // ascending or descending?
+      order: "asc",
+
+    }
+  }).then((result) => {
+    console.log(result);
+
+  });
+};
+
+// another option is to use zomato collections which is essentially their best of list for the locations.
+
+
+
+
+
 
 // Below code note needed anymore, leaving for posterity. Delete on final
 
