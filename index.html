@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project 4</title>
+
+    <!-- testing code -->
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
     <link href="https://fonts.googleapis.com/css2?family=Nixie+One&family=Quicksand:wght@400;700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="./style/style.css">
 </head>
@@ -23,7 +30,7 @@
                 <li><a href="#">top</a></li>
                 <li><a href="#cities">cities</a></li>
                 <li><a href="#forecasts">forecast</a></li>
-                <li><a href="#maps">maps</a></li>
+                <li class="mapNav"><a href="#maps">maps</a></li>
                 <li><a href="#restaurants">food</a></li>
                 <li><a href="#hotels">hotels</a></li>
             </ul>
@@ -77,9 +84,28 @@
                 </ul>
                 <div class="mapResults">
                     <!-- Map section, use JS to append to the class -->
+                    <div id="map"></div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
+    
+    <section>
+        <div class="wrapper">
+            <!-- Forecast section -->
+            <!-- custom js slider here? -->
+            <ul class="fiveDayForecast">
+                <!-- imgs to be added via js for more control on how they appear -->
+                <!-- Use an append using weather data from api -->
+                <!-- Here.com api has a forecast_7days_simple 'product' parameter we can use to pull just the weather for the cities as needed. If we remove simple it'll give morning, aft, even weather as well which may be too much info?  -->
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+                <li><img src="" alt=""></li>
+            </ul>
+        </div>
+    </section>
 
         <section class="mainContainer" id="restaurants">
             <div class="innerWrapper">

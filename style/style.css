@@ -700,3 +700,8 @@ main .sevenDayForecast .dayOfWeek:first-of-type li:nth-child(n+2) {
 main .sevenDayForecast .dayOfWeek:first-of-type li:last-child {
   border-right: 4px solid transparent;
 }
+
+#map {
+  width: 680px;
+  height: 520px;
+}
