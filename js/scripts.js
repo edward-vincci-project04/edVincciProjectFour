@@ -46,7 +46,7 @@ vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
     ["Kerry", "All the way west in Ireland is one of the country’s most scenic counties. Kerry’s mountains, lakes and coasts are postcard-perfect, and that’s before you add in Killarney National Park. The unique small towns such as Dingle add to its charm. -forbes.com"], 
     ["Male", "This tropical nation in the Indian Ocean is made up of more than 1,000 coral islands. It’s home to some of the world’s most luxurious hotel resorts, with white sandy beaches, underwater villas and restaurants and bright blue waters. -forbes.com"],
-    ["Waikato", "Waikato, a region in New Zealand’s North Island, is home to massive underground caves, lush rain forest and the busy city of Hamilton. But the area’s main attraction? A Middle-earth adventure on the film set of Lord of the Rings. Hobbiton Movie Set still has the original Hobbit holes from the making of the films. -forbes.com"], 
+    ["Waikato", "Waikato, a region in New Zealand’s North Island, is home to massive underground caves, lush rainforest and the buzzy city of Hamilton. But the area’s main attraction? A Middle-earth adventure on the film set of Lord of the Rings. Hobbiton Movie Set still has the original Hobbit holes from the making of the films. -forbes.com"], 
     ["Mcmurdo Station", "The McMurdo Station is a United States Antarctic research station on the south tip of Ross Island, which is in the New Zealand–claimed Ross Dependency on the shore of McMurdo Sound in Antarctica. It is operated by the United States through the United States Antarctic Program, a branch of the National Science Foundation. -wikipedia.org"],
     ["Bridgetown", "Bridgetown, the capital of Barbados, is a port city on the island’s southwest coast. It's known for its British colonial architecture, 17th-century Garrison and horseracing track. Near the central National Heroes Square, which fringes the Constitution River, Nidhe Israel Synagogue and its museum explore the island’s Jewish history. -wikipedia.org"], 
     ["Marrakesh", "This ancient walled city is home to mosques, palaces and lush gardens. It’s known as The Red City thanks to the color of the brick walls surrounding the city. The medina is a UNESCO World Heritage Centre. -forbes.com"], 
@@ -82,7 +82,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 
     // if statements to populate list to user
     // below is testing. needs updating on html completion
-    if ( userSelection === tempDesc ||
+    if (userSelection === tempDesc ||
     userSelection === "Cool" && tempDesc === "Cool" ||
     userSelection === "Cool" && tempDesc === "Refreshingly cool" ||
     userSelection === "Cool" && tempDesc === "Quite cool" ||
@@ -101,10 +101,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         //   console.log("fack", err1);
         //   console.log("shiet", err2);
         // });
-        // console.log(vacayApp.mapPromise(city));
         
-        vacayApp.weatherPromise(city, "forecast_7days")
-        .then( (result) => {
             //static map as a fall back 
                 // <img src="https://image.maps.ls.hereapi.com/mia/1.6/?apiKey=${vacayApp.hereApiKey}&ci=${city}&nocp" alt="" class="mapHidden">
             
@@ -126,12 +123,11 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             // we could move this click to the map nav along with initializing the map so it only runs once instead of repeating on every click here
             vacayApp.click();
             vacayApp.mapInit();
-        });
 
     } else if (userSelection != tempDesc) {
         // nothing happens if the temperature doesn't match the selected temp
     } else {
-        console.log("type while ('safi' != 'old') console.log('fuuuuuck')"); // error
+        console.log("type while (safi is old) console.log('fuuuuuck')"); // error
     }
 }
 
@@ -326,7 +322,6 @@ vacayApp.init = () => {
 
         vacayApp.userSelect = $(this).val();
         vacayApp.destinationsCycle();
-
         // dynamic hover color on <a> tags: 
 
         $("a").hover( function(e) {
@@ -361,8 +356,6 @@ vacayApp.init = () => {
     // click listener on innerNav (cities)
     $(".innerNav").on("click", "button", function() {
         // show different info for diff cities
-        vacayApp.displayForecasts($(this).text());
-        console.log($(this).text());
     });
 }
 // -------------------
