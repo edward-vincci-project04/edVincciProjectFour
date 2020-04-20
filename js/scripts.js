@@ -46,7 +46,7 @@ vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
     ["Kerry", "All the way west in Ireland is one of the country’s most scenic counties. Kerry’s mountains, lakes and coasts are postcard-perfect, and that’s before you add in Killarney National Park. The unique small towns such as Dingle add to its charm. -forbes.com"], 
     ["Male", "This tropical nation in the Indian Ocean is made up of more than 1,000 coral islands. It’s home to some of the world’s most luxurious hotel resorts, with white sandy beaches, underwater villas and restaurants and bright blue waters. -forbes.com"],
-    ["Waikato", "Waikato, a region in New Zealand’s North Island, is home to massive underground caves, lush rain forest and the busy city of Hamilton. But the area’s main attraction? A Middle-earth adventure on the film set of Lord of the Rings. Hobbiton Movie Set still has the original Hobbit holes from the making of the films. -forbes.com"], 
+    ["Waikato", "Waikato, a region in New Zealand’s North Island, is home to massive underground caves, lush rainforest and the buzzy city of Hamilton. But the area’s main attraction? A Middle-earth adventure on the film set of Lord of the Rings. Hobbiton Movie Set still has the original Hobbit holes from the making of the films. -forbes.com"], 
     ["Mcmurdo Station", "The McMurdo Station is a United States Antarctic research station on the south tip of Ross Island, which is in the New Zealand–claimed Ross Dependency on the shore of McMurdo Sound in Antarctica. It is operated by the United States through the United States Antarctic Program, a branch of the National Science Foundation. -wikipedia.org"],
     ["Bridgetown", "Bridgetown, the capital of Barbados, is a port city on the island’s southwest coast. It's known for its British colonial architecture, 17th-century Garrison and horseracing track. Near the central National Heroes Square, which fringes the Constitution River, Nidhe Israel Synagogue and its museum explore the island’s Jewish history. -wikipedia.org"], 
     ["Marrakesh", "This ancient walled city is home to mosques, palaces and lush gardens. It’s known as The Red City thanks to the color of the brick walls surrounding the city. The medina is a UNESCO World Heritage Centre. -forbes.com"], 
@@ -82,7 +82,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 
     // if statements to populate list to user
     // below is testing. needs updating on html completion
-    if ( userSelection === tempDesc ||
+    if (userSelection === tempDesc ||
     userSelection === "Cool" && tempDesc === "Cool" ||
     userSelection === "Cool" && tempDesc === "Refreshingly cool" ||
     userSelection === "Cool" && tempDesc === "Quite cool" ||
@@ -101,7 +101,6 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         //   console.log("fack", err1);
         //   console.log("shiet", err2);
         // });
-        // console.log(vacayApp.mapPromise(city));
         
         vacayApp.weatherPromise(city, "forecast_7days")
         .then( (result) => {
@@ -116,18 +115,9 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
                 //static map as a fall back 
                 // <img src="https://image.maps.ls.hereapi.com/mia/1.6/?apiKey=${vacayApp.hereApiKey}&ci=${city}&nocp" alt="" class="mapHidden">
             
-        const resultsHtml = `
-            <h3 class="${city} ${country}">${city}, ${country}</h3>
-            <p>The current average temperature is ${temp}</p>
-            <p>${cityInfo}</p>`;
-        
-        const linksHtml = `
-            <li><button class="${country}">${city}</button></li>`;
+            const linksHtml = `
+                <li><button class="${country}">${city}</button></li>`;
 
-        $(".displayResults").append(resultsHtml);
-        $(".innerNav").append(linksHtml);
-        // set a default for forecasts
-        vacayApp.displayForecasts(city);
             $(".displayResults").append(resultsHtml);
 
             //need to call the click function b/c you can't select the class of the appended elements above otherwise. Solved by moving class of city to an ID to make it unique to grab via attr.
@@ -139,74 +129,10 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     } else if (userSelection != tempDesc) {
         // nothing happens if the temperature doesn't match the selected temp
     } else {
-        console.log("type while ('safi' != 'old') console.log('fuuuuuck')"); // error
+        console.log("type while (safi is old) console.log('fuuuuuck')"); // error
     }
 }
 
-vacayApp.displayForecasts = (city) => {
-        
-    vacayApp.weatherPromise(city, "forecast_7days_simple").then( (result) => {
-        const forecastsArray = result.dailyForecasts.forecastLocation.forecast;
-        $(".userSelectedCity").text(city);
-        $(".sevenDayForecast").empty();
-
-        const legendHtml = `
-        <li class="legendColumn dayOfWeek">
-            <ul>
-                <li></li>
-                <li>
-                    <h4>°C</h4>
-                </li>
-                <li>
-                    <h4>UV</h4>
-                </li>
-                <li>
-                    <h4>Wind <span>(km/h)</span></h4>
-                </li>
-                <li></li>
-            </ul>
-        </li>`;
-
-        $(".sevenDayForecast").append(legendHtml);
-
-        // forEach to go through each day and spit out data
-        forecastsArray.forEach( (day) => {
-            const { 
-                description, highTemperature, lowTemperature, skyDescription, uvIndex, utcTime, weekday, windSpeed } =  day;
-            
-            const avgTemp = (parseInt(lowTemperature) + parseInt(highTemperature)) / 2;
-            const windInt = Math.round(parseInt(windSpeed));
-
-            const forecastHtml = `
-                <li class="${weekday}Column dayOfWeek">
-                    <ul>
-                        <li>
-                            <h3>${weekday.substr(0, 3)}</h3>
-                            <p>${utcTime.substr(5, 5)}</p>
-                        </li>
-                        <li>
-                            <h4>${avgTemp}°</h4>
-                        </li>
-                        <li>
-                            <h4>${uvIndex}</h4>
-                        </li>
-                        <li>
-                            <h4>${windInt}</h4>
-                        </li>
-                        <li>
-                            <p>${skyDescription}</p>
-                        </li>
-                    </ul>
-                </li>`;
-    
-            $(".sevenDayForecast").append(forecastHtml);
-            
-        });
-        
-    }).fail( (error) => {
-        console.log(error);
-    });
-}
 
 // we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
 // COMPLETED - still need to init map somewhere.
@@ -333,7 +259,6 @@ vacayApp.init = () => {
 
         vacayApp.userSelect = $(this).val();
         vacayApp.destinationsCycle();
-
         // dynamic hover color on <a> tags: 
 
         $("a").hover( function(e) {
@@ -368,8 +293,6 @@ vacayApp.init = () => {
     // click listener on innerNav (cities)
     $(".innerNav").on("click", "button", function() {
         // show different info for diff cities
-        vacayApp.displayForecasts($(this).text());
-        console.log($(this).text());
     });
 }
 // -------------------
