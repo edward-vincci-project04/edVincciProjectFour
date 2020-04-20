@@ -95,20 +95,23 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         vacayApp.weatherPromise(city, "forecast_7days")
         .then( (result) => {
             const forecastsArray = result.forecasts.forecastLocation.forecast;
-            
-            // Povidencia is 26C but is cool. ???
-            const resultsHtml = `
-                <button id ="${city}" class="${country} mapGrab">${city}, ${country}</button>                
-                <p>The current average temperature is ${temp}</p>
-                <p>${cityInfo}</p>`;
-
-                //static map as a fall back 
+        
+            //static map as a fall back 
                 // <img src="https://image.maps.ls.hereapi.com/mia/1.6/?apiKey=${vacayApp.hereApiKey}&ci=${city}&nocp" alt="" class="mapHidden">
             
+            const resultsHtml = `
+                <h3 class="${city} ${country}">${city}, ${country}</h3>
+                <p>The current average temperature is ${temp}</p>
+                <p>${cityInfo}</p>`;
+            
             const linksHtml = `
-                <li><button class="${country}">${city}</button></li>`;
+                <li><button class="${city}">${city}</button></li>`;
 
             $(".displayResults").append(resultsHtml);
+            $(".innerNav").append(linksHtml);
+            
+            // set a default for forecasts
+            vacayApp.displayForecasts(city);
 
             //need to call the click function b/c you can't select the class of the appended elements above otherwise. Solved by moving class of city to an ID to make it unique to grab via attr.
             // we could move this click to the map nav along with initializing the map so it only runs once instead of repeating on every click here
@@ -123,29 +126,100 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     }
 }
 
-// Click on city name to move to map and update it location
-vacayApp.click = () => {
-  $(".mapGrab").on("click", function() {
-    cityClick = $(this).attr("id");
-  
-    // scroll to map area on click see to be broken as in it bounces around
-    $('html, body').animate({
-      scrollTop: $('.mapResults').offset().top,
-    }, 300, 'linear');
-
-    vacayApp.weatherPromise(cityClick, "observation")
-    .then( (result) => {
-        const lat = result.observations.location[0].latitude;
-        const long = result.observations.location[0].longitude;
-        //move map function
-        vacayApp.moveMap(lat, long)
+vacayApp.displayForecasts = (city) => {
         
-      });
+    vacayApp.weatherPromise(city, "forecast_7days_simple").then( (result) => {
+        const forecastsArray = result.dailyForecasts.forecastLocation.forecast;
+        $(".userSelectedCity").text(city);
+        $(".sevenDayForecast").empty();
+
+        const legendHtml = `
+        <li class="legendColumn dayOfWeek">
+            <ul>
+                <li></li>
+                <li>
+                    <h4>°C</h4>
+                </li>
+                <li>
+                    <h4>UV</h4>
+                </li>
+                <li>
+                    <h4>Wind <span>(km/h)</span></h4>
+                </li>
+                <li></li>
+            </ul>
+        </li>`;
+
+        $(".sevenDayForecast").append(legendHtml);
+
+        // forEach to go through each day and spit out data
+        forecastsArray.forEach( (day) => {
+            const { 
+                highTemperature, lowTemperature, skyDescription, 
+                uvIndex, utcTime, weekday, windSpeed } =  day;
+            
+            const avgTemp = (parseInt(lowTemperature) + parseInt(highTemperature)) / 2;
+            const windInt = Math.round(parseInt(windSpeed));
+
+            const forecastHtml = `
+                <li class="${weekday}Column dayOfWeek">
+                    <ul>
+                        <li>
+                            <h3>${weekday.substr(0, 3)}</h3>
+                            <p>${utcTime.substr(5, 5)}</p>
+                        </li>
+                        <li>
+                            <h4>${avgTemp}°</h4>
+                        </li>
+                        <li>
+                            <h4>${uvIndex}</h4>
+                        </li>
+                        <li>
+                            <h4>${windInt}</h4>
+                        </li>
+                        <li>
+                            <p>${skyDescription}</p>
+                        </li>
+                    </ul>
+                </li>`;
+    
+            $(".sevenDayForecast").append(forecastHtml);
+            
+        });
+        
+    }).fail( (error) => {
+        console.log(error);
     });
-  };
-    $(".mapNav").on("click", function() {
-      vacayApp.mapInit();
-    })
+}
+
+// we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
+// COMPLETED - still need to init map somewhere.
+vacayApp.click = function() {
+    $("#maps").on("click", ".innerNav button", function() {
+        const cityClick = $(this).attr("class");
+        console.log(cityClick);
+
+        vacayApp.weatherPromise(cityClick, "observation")
+        .then( (result) => {
+            const lat = result.observations.location[0].latitude;
+            const long = result.observations.location[0].longitude;
+            //move map function
+            vacayApp.moveMap(lat, long);            
+        });
+      });
+
+          $("#restaurants").on("click", ".innerNav button", function () {
+            const cityClick = $(this).attr("class");
+            console.log(cityClick);
+            $(".restaurants").empty();
+            vacayApp.zomatoCityID(cityClick);
+        });
+
+    //temp disabled as it seems like it's not needed, map loading find with 1 init.
+    // $(".mapNav").on("click", function() {
+    //     vacayApp.mapInit();
+    // });
+};
 
 // ajax call to run our cities through to get the array data from.
 vacayApp.getDestWeather = (input) => {
@@ -193,6 +267,7 @@ vacayApp.zomatoCityID = (city) => {
       q: city,
     }
   }).then ( (result) => {
+    // console.log(result);
     vacayApp.cityID = result.location_suggestions[0].id;
     vacayApp.zomatoCollections(vacayApp.cityID);
   });
@@ -222,21 +297,20 @@ vacayApp.collectionsToPage = (input) => {
   input.forEach( (input) => {
 
     const collectionImg = input.collection.image_url;
-    console.log(collectionImg)
+    // console.log(collectionImg)
     const collectionDescription = input.collection.description
-    console.log(collectionDescription);
+    // console.log(collectionDescription);
     const collectionURL = input.collection.share_url
-    console.log(collectionURL)
+    // console.log(collectionURL)
 
     const resultsHtml = `
       <h2>${collectionDescription}</h2>                
       <a href="${collectionURL}">
-         <img alt="${collectionDescription}" src="${collectionImg}">
+        <img alt="${collectionDescription}" src="${collectionImg}">
       </a>
       `;
 
   $(".restaurants").append(resultsHtml);
-
 
   })
 }
@@ -245,33 +319,33 @@ vacayApp.collectionsToPage = (input) => {
 // call below to init the map
 vacayApp.mapInit = () => { 
   // Updated var to const, some namespace was used during testing for better manipulation
-  const platform = new H.service.Platform({
-    apikey: vacayApp.hereApiKey
-  });
-  const defaultLayers = platform.createDefaultLayers();
+    const platform = new H.service.Platform({
+        apikey: vacayApp.hereApiKey
+    });
+    const defaultLayers = platform.createDefaultLayers();
 
-  // need to empty it for testing as it duplicates if you dont
-  $("#map").empty();
+    // need to empty it for testing as it duplicates if you dont
+    $("#map").empty();
 
-  vacayApp.map = new H.Map(document.getElementById('map'),
-    defaultLayers.vector.normal.map, {
-    center: { lat: 0, lng: 0 },
-    zoom: 1,
-    pixelRatio: window.devicePixelRatio || 1
-  });
+    vacayApp.map = new H.Map(document.getElementById('map'),
+        defaultLayers.vector.normal.map, {
+        center: { lat: 0, lng: 0 },
+        zoom: 1,
+        pixelRatio: window.devicePixelRatio || 1
+    });
 
-  window.addEventListener('resize', () => vacayApp.map.getViewPort().resize());
-  
-  const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(vacayApp.map));
-  
-  const ui = H.ui.UI.createDefault(vacayApp.map, defaultLayers);
+    window.addEventListener('resize', () => vacayApp.map.getViewPort().resize());
+    
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(vacayApp.map));
+    
+    const ui = H.ui.UI.createDefault(vacayApp.map, defaultLayers);
 
 }  
 
 // call this to move the map
 vacayApp.moveMap = (latt, long) => {
-  vacayApp.map.setCenter({ lat: latt, lng: long });
-  vacayApp.map.setZoom(13);
+    vacayApp.map.setCenter({ lat: latt, lng: long });
+    vacayApp.map.setZoom(13);
 }
 
 // -------------------
@@ -312,7 +386,7 @@ vacayApp.init = () => {
         $(".innerNav").empty();
         $(".userSelected").text(`${vacayApp.userSelect} Places:`);
 
-        // scroll down to content and show hidden nav
+        // scroll down to content
         $('html, body').animate({
             scrollTop: $('.resultsContainer').offset().top,
         }, 300, 'linear');
@@ -321,6 +395,8 @@ vacayApp.init = () => {
     // click listener on innerNav (cities)
     $(".innerNav").on("click", "button", function() {
         // show different info for diff cities
+        vacayApp.displayForecasts($(this).text());
+        console.log($(this).text());
     });
 }
 // -------------------
