@@ -576,6 +576,9 @@ main .innerNav {
 }
 
 main .innerNav li {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 1 auto;
+          flex: 0 1 auto;
   text-align: center;
   border-right: 1px solid #b4f6ff;
 }

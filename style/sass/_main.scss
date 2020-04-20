@@ -51,6 +51,7 @@ main {
         width: 100%;
 
         li {
+            flex: 0 1 auto;
             text-align: center;
             border-right: 1px solid $bgColor;
         }

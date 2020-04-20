@@ -365,5 +365,7 @@ vacayApp.init = () => {
 // -------------------
 $(()=> {
     vacayApp.init();
-    vacayApp.mapInit();
+    // I don't think this mapInit should be here.
+    // what you think?
+    // vacayApp.mapInit();
 })
