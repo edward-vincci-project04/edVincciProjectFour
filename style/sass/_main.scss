@@ -84,6 +84,60 @@ main {
 // city info section ends
 }
 
+// forecasts section
+.sevenDayForecast {
+    display: flex;
+    margin-top: 20px;
+
+    .dayOfWeek {
+        flex: 1 0 11%;
+        border-left: 2px solid $bgColor;
+        padding: 0 4px;
+
+        ul {
+            display: flex;
+            flex-direction: column;
+        }
+        li {
+            height: 45px;
+            border-bottom: 1px solid $secondaryWhite;
+        }
+
+        li:first-child {
+            height: 75px;
+            text-align: center;
+        }
+
+        li:last-child {
+            height: 75px;
+            border-bottom: 1px solid transparent;
+        }
+
+        li:nth-child(n+2) {
+            @include flexCenter();
+        }
+
+        p {
+            display: block;
+            text-align: center;
+        }
+
+        h4 {@include fontSans(14);}
+    }
+
+    .dayOfWeek:first-of-type,
+    .dayOfWeek:nth-of-type(2) {
+        border-left: 2px solid transparent;
+    }
+    
+    .dayOfWeek:first-of-type {
+        h4 {text-align: center;}
+        span {@include fontSize(10); display: block;}
+        li:nth-child(n+2){border-right: 4px solid $secondaryWhite;}
+        li:last-child {border-right: 4px solid transparent;}
+    }
+}
+// forecasts end
 #map {
     width: 680px;
     height: 520px;

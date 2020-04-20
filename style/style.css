@@ -613,6 +613,94 @@ main .displayResults {
   overflow-x: auto;
 }
 
+.sevenDayForecast {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 20px;
+}
+
+.sevenDayForecast .dayOfWeek {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 0 11%;
+          flex: 1 0 11%;
+  border-left: 2px solid #b4f6ff;
+  padding: 0 4px;
+}
+
+.sevenDayForecast .dayOfWeek ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.sevenDayForecast .dayOfWeek li {
+  height: 45px;
+  border-bottom: 1px solid #D6D6D7;
+}
+
+.sevenDayForecast .dayOfWeek li:first-child {
+  height: 75px;
+  text-align: center;
+}
+
+.sevenDayForecast .dayOfWeek li:last-child {
+  height: 75px;
+  border-bottom: 1px solid transparent;
+}
+
+.sevenDayForecast .dayOfWeek li:nth-child(n+2) {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.sevenDayForecast .dayOfWeek p {
+  display: block;
+  text-align: center;
+}
+
+.sevenDayForecast .dayOfWeek h4 {
+  font-size: 14px;
+  font-size: 1.4rem;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 400;
+  color: #181818;
+}
+
+.sevenDayForecast .dayOfWeek:first-of-type,
+.sevenDayForecast .dayOfWeek:nth-of-type(2) {
+  border-left: 2px solid transparent;
+}
+
+.sevenDayForecast .dayOfWeek:first-of-type h4 {
+  text-align: center;
+}
+
+.sevenDayForecast .dayOfWeek:first-of-type span {
+  font-size: 10px;
+  font-size: 1rem;
+  display: block;
+}
+
+.sevenDayForecast .dayOfWeek:first-of-type li:nth-child(n+2) {
+  border-right: 4px solid #D6D6D7;
+}
+
+.sevenDayForecast .dayOfWeek:first-of-type li:last-child {
+  border-right: 4px solid transparent;
+}
+
 #map {
   width: 680px;
   height: 520px;
