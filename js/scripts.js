@@ -200,7 +200,7 @@ vacayApp.displayForecasts = (city) => {
 // we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
 // COMPLETED - still need to init map somewhere.
 vacayApp.click = () => {
-    $(".innerNav").on("click", "button", function() {
+    $(".mapGrab").on("click", "button", function() {
         cityClick = $(this).attr("class");
     
         // scroll to map area on click see to be broken as in it bounces around
@@ -356,6 +356,8 @@ vacayApp.init = () => {
     // click listener on innerNav (cities)
     $(".innerNav").on("click", "button", function() {
         // show different info for diff cities
+        vacayApp.displayForecasts($(this).text());
+        console.log($(this).text());
     });
 }
 // -------------------
