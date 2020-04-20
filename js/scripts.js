@@ -41,6 +41,9 @@ const vacayApp = {};
 vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
 vacayApp.hereURL = `https:weather.ls.hereapi.com/weather/1.0/report.json`;
 vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/mapview`;
+vacayApp.zomatoApiKey = `b655786c25f1fdb7949ffd2d5bb49eb6`;
+vacayApp.zomatoCityURL =`https://developers.zomato.com/api/v2.1/cities`
+vacayApp.zomatoCollectionsURL = `https://developers.zomato.com/api/v2.1/collections`
 vacayApp.userSelect;
 vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
@@ -89,18 +92,9 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     userSelection === "Cool" && tempDesc === "Frigid" ||
     userSelection === "Cool" && tempDesc === "Chilly") {
         
-        // vacayApp.mapPromise(city)
-        // .then( (result) => {
-        //     // trying to display map image but the responseText is literally an image. don't know how to use it
-        //     console.log(result);
-        // // use mapPromise endpoint as img src
-
-        // // console.log(vacayApp.mapPromise(city));
-
-        // }).fail ( (err1, err2) => {
-        //   console.log("fack", err1);
-        //   console.log("shiet", err2);
-        // });
+        vacayApp.weatherPromise(city, "forecast_7days")
+        .then( (result) => {
+            const forecastsArray = result.forecasts.forecastLocation.forecast;
         
             //static map as a fall back 
                 // <img src="https://image.maps.ls.hereapi.com/mia/1.6/?apiKey=${vacayApp.hereApiKey}&ci=${city}&nocp" alt="" class="mapHidden">
@@ -123,6 +117,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             // we could move this click to the map nav along with initializing the map so it only runs once instead of repeating on every click here
             vacayApp.click();
             vacayApp.mapInit();
+        });
 
     } else if (userSelection != tempDesc) {
         // nothing happens if the temperature doesn't match the selected temp
@@ -201,25 +196,29 @@ vacayApp.displayForecasts = (city) => {
 // COMPLETED - still need to init map somewhere.
 vacayApp.click = function() {
     $("#maps").on("click", ".innerNav button", function() {
-        cityClick = $(this).attr("class");
-    
-        // scroll to map area on click see to be broken as in it bounces around
-        // $('html, body').animate({
-        //     scrollTop: $('.mapResults').offset().top,
-        // }, 300, 'linear');
+        const cityClick = $(this).attr("class");
+        console.log(cityClick);
 
         vacayApp.weatherPromise(cityClick, "observation")
         .then( (result) => {
             const lat = result.observations.location[0].latitude;
             const long = result.observations.location[0].longitude;
             //move map function
-            vacayApp.moveMap(lat, long);
-            
+            vacayApp.moveMap(lat, long);            
         });
-    });
-    $(".mapNav").on("click", function() {
-        vacayApp.mapInit();
-    });
+      });
+
+          $("#restaurants").on("click", ".innerNav button", function () {
+            const cityClick = $(this).attr("class");
+            console.log(cityClick);
+            $(".restaurants").empty();
+            vacayApp.zomatoCityID(cityClick);
+        });
+
+    //temp disabled as it seems like it's not needed, map loading find with 1 init.
+    // $(".mapNav").on("click", function() {
+    //     vacayApp.mapInit();
+    // });
 };
 
 // ajax call to run our cities through to get the array data from.
@@ -255,26 +254,66 @@ vacayApp.weatherPromise = (city, product) => {
     });
 }
 
-// Below code note needed anymore, leaving for posterity. Delete on final
+// need city id to input into ajax to get establishments (types of restaurants)
+vacayApp.zomatoCityID = (city) => {
+  return $.ajax({
+    url: vacayApp.zomatoCityURL,
+    method: "GET",
+    dataType: "json",
+    headers: {
+      "user-key": vacayApp.zomatoApiKey
+    },
+    data: {
+      q: city,
+    }
+  }).then ( (result) => {
+    // console.log(result);
+    vacayApp.cityID = result.location_suggestions[0].id;
+    vacayApp.zomatoCollections(vacayApp.cityID);
+  });
+};
 
-// maps promise for later.
-// maybe we should cut the map. they look so ugly
-// vacayApp.mapPromise = (city) => {
-//     return $.ajax({
-//         url: vacayApp.hereMapURL,
-//         method: "GET",
-//         dataType: "json",
-//         data: {
-//             apiKey: vacayApp.hereApiKey,
-//             ci: city,
-//             // lat: latitude,
-//             // lon: longitude,
-//             // vt: "0",
-//             // z: "14"
-//         }
-//     });
-//   }
+// Using zomato's built in collections (best of) reviews
+vacayApp.zomatoCollections = (cityID) => {
+  return $.ajax({
+    url: vacayApp.zomatoCollectionsURL,
+    method: "GET",
+    dataType: "json",
+    headers: {
+      "user-key": vacayApp.zomatoApiKey
+    },
+    data: {
+      city_id: cityID,
+    }
+  }).then((result) => {
+    // console.log(result);
+    // need to sort through establishment types and append to html so user can select cuisine type which we feed into the below ajax.
+    vacayApp.collectionsList = result.collections;
+    vacayApp.collectionsToPage(vacayApp.collectionsList);
+  });
+};
 
+vacayApp.collectionsToPage = (input) => {
+  input.forEach( (input) => {
+
+    const collectionImg = input.collection.image_url;
+    // console.log(collectionImg)
+    const collectionDescription = input.collection.description
+    // console.log(collectionDescription);
+    const collectionURL = input.collection.share_url
+    // console.log(collectionURL)
+
+    const resultsHtml = `
+      <h2>${collectionDescription}</h2>                
+      <a href="${collectionURL}">
+        <img alt="${collectionDescription}" src="${collectionImg}">
+      </a>
+      `;
+
+  $(".restaurants").append(resultsHtml);
+
+  })
+}
 
 // below code is directly from here.com api docs modifications done as necessary
 // call below to init the map
