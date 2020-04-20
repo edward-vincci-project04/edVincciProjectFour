@@ -111,7 +111,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
                 <p>${cityInfo}</p>`;
             
             const linksHtml = `
-                <li><button class="${country}">${city}</button></li>`;
+                <li><button class="${city}">${city}</button></li>`;
 
             $(".displayResults").append(resultsHtml);
             $(".innerNav").append(linksHtml);
@@ -199,21 +199,21 @@ vacayApp.displayForecasts = (city) => {
 
 // we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
 // COMPLETED - still need to init map somewhere.
-vacayApp.click = () => {
-    $(".mapGrab").on("click", "button", function() {
+vacayApp.click = function() {
+    $("#maps").on("click", ".innerNav button", function() {
         cityClick = $(this).attr("class");
     
         // scroll to map area on click see to be broken as in it bounces around
-        $('html, body').animate({
-            scrollTop: $('.mapResults').offset().top,
-        }, 300, 'linear');
+        // $('html, body').animate({
+        //     scrollTop: $('.mapResults').offset().top,
+        // }, 300, 'linear');
 
         vacayApp.weatherPromise(cityClick, "observation")
         .then( (result) => {
             const lat = result.observations.location[0].latitude;
             const long = result.observations.location[0].longitude;
             //move map function
-            vacayApp.moveMap(lat, long)
+            vacayApp.moveMap(lat, long);
             
         });
     });
@@ -347,7 +347,7 @@ vacayApp.init = () => {
         $(".innerNav").empty();
         $(".userSelected").text(`${vacayApp.userSelect} Places:`);
 
-        // scroll down to content and show hidden nav
+        // scroll down to content
         $('html, body').animate({
             scrollTop: $('.resultsContainer').offset().top,
         }, 300, 'linear');

@@ -566,19 +566,22 @@ main .innerNav {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  justify-content: center;
   position: absolute;
   top: 0;
-  right: 12px;
-  height: 100%;
+  left: 0;
+  padding: 0 50px;
+  height: 7%;
+  width: 100%;
 }
 
 main .innerNav li {
-  width: 100%;
-  text-align: right;
+  text-align: center;
+  border-right: 1px solid #b4f6ff;
+}
+
+main .innerNav li:last-child {
+  border-right: 1px solid transparent;
 }
 
 main .innerNav button {
@@ -590,7 +593,7 @@ main .innerNav button {
   letter-spacing: 2px;
   padding: 0;
   border: 0;
-  margin: 10px 0;
+  margin: 6px 10px;
   border-radius: 0;
   border-bottom: 3px solid transparent;
   -webkit-transition-duration: 0.3s;
@@ -604,23 +607,24 @@ main .innerNav button:hover {
 main .innerNav::after {
   content: '';
   position: absolute;
-  right: -4px;
-  height: 100%;
-  border-right: 3px solid #D6D6D7;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 3px solid #D6D6D7;
 }
 
 main .displayResults {
   overflow-x: auto;
 }
 
-.sevenDayForecast {
+main .sevenDayForecast {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   margin-top: 20px;
 }
 
-.sevenDayForecast .dayOfWeek {
+main .sevenDayForecast .dayOfWeek {
   -webkit-box-flex: 1;
       -ms-flex: 1 0 11%;
           flex: 1 0 11%;
@@ -628,7 +632,7 @@ main .displayResults {
   padding: 0 4px;
 }
 
-.sevenDayForecast .dayOfWeek ul {
+main .sevenDayForecast .dayOfWeek ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -638,22 +642,22 @@ main .displayResults {
           flex-direction: column;
 }
 
-.sevenDayForecast .dayOfWeek li {
+main .sevenDayForecast .dayOfWeek li {
   height: 45px;
   border-bottom: 1px solid #D6D6D7;
 }
 
-.sevenDayForecast .dayOfWeek li:first-child {
+main .sevenDayForecast .dayOfWeek li:first-child {
   height: 75px;
   text-align: center;
 }
 
-.sevenDayForecast .dayOfWeek li:last-child {
+main .sevenDayForecast .dayOfWeek li:last-child {
   height: 75px;
   border-bottom: 1px solid transparent;
 }
 
-.sevenDayForecast .dayOfWeek li:nth-child(n+2) {
+main .sevenDayForecast .dayOfWeek li:nth-child(n+2) {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -665,12 +669,12 @@ main .displayResults {
           align-items: center;
 }
 
-.sevenDayForecast .dayOfWeek p {
+main .sevenDayForecast .dayOfWeek p {
   display: block;
   text-align: center;
 }
 
-.sevenDayForecast .dayOfWeek h4 {
+main .sevenDayForecast .dayOfWeek h4 {
   font-size: 14px;
   font-size: 1.4rem;
   font-family: 'Quicksand', sans-serif;
@@ -678,30 +682,30 @@ main .displayResults {
   color: #181818;
 }
 
-.sevenDayForecast .dayOfWeek:first-of-type,
-.sevenDayForecast .dayOfWeek:nth-of-type(2) {
+main .sevenDayForecast .dayOfWeek:first-of-type,
+main .sevenDayForecast .dayOfWeek:nth-of-type(2) {
   border-left: 2px solid transparent;
 }
 
-.sevenDayForecast .dayOfWeek:first-of-type h4 {
+main .sevenDayForecast .dayOfWeek:first-of-type h4 {
   text-align: center;
 }
 
-.sevenDayForecast .dayOfWeek:first-of-type span {
+main .sevenDayForecast .dayOfWeek:first-of-type span {
   font-size: 10px;
   font-size: 1rem;
   display: block;
 }
 
-.sevenDayForecast .dayOfWeek:first-of-type li:nth-child(n+2) {
+main .sevenDayForecast .dayOfWeek:first-of-type li:nth-child(n+2) {
   border-right: 4px solid #D6D6D7;
 }
 
-.sevenDayForecast .dayOfWeek:first-of-type li:last-child {
+main .sevenDayForecast .dayOfWeek:first-of-type li:last-child {
   border-right: 4px solid transparent;
 }
 
-#map {
+main #map {
   width: 680px;
   height: 520px;
 }
