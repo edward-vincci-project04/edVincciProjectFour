@@ -617,3 +617,11 @@ main .displayResults {
   width: 680px;
   height: 520px;
 }
+
+.restaurants {
+  overflow-x: auto;
+}
+
+.restaurants img {
+  width: 40%;
+}

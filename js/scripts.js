@@ -43,7 +43,7 @@ vacayApp.hereURL = `https:weather.ls.hereapi.com/weather/1.0/report.json`;
 vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/mapview`;
 vacayApp.zomatoApiKey = `b655786c25f1fdb7949ffd2d5bb49eb6`;
 vacayApp.zomatoCityURL =`https://developers.zomato.com/api/v2.1/cities`
-vacayApp.zomatoEstablishmentURL = `https://developers.zomato.com/api/v2.1/establishments`
+vacayApp.zomatoCollectionsURL = `https://developers.zomato.com/api/v2.1/collections`
 vacayApp.userSelect;
 vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
@@ -92,19 +92,6 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     userSelection === "Cool" && tempDesc === "Frigid" ||
     userSelection === "Cool" && tempDesc === "Chilly") {
         
-        // vacayApp.mapPromise(city)
-        // .then( (result) => {
-        //     // trying to display map image but the responseText is literally an image. don't know how to use it
-        //     console.log(result);
-        // // use mapPromise endpoint as img src
-
-        // // console.log(vacayApp.mapPromise(city));
-
-        // }).fail ( (err1, err2) => {
-        //   console.log("fack", err1);
-        //   console.log("shiet", err2);
-        // });
-        
         vacayApp.weatherPromise(city, "forecast_7days")
         .then( (result) => {
             const forecastsArray = result.forecasts.forecastLocation.forecast;
@@ -136,9 +123,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     }
 }
 
-
-// we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
-// COMPLETED - still need to init map somewhere.
+// Click on city name to move to map and update it location
 vacayApp.click = () => {
   $(".mapGrab").on("click", function() {
     cityClick = $(this).attr("id");
@@ -209,14 +194,14 @@ vacayApp.zomatoCityID = (city) => {
     }
   }).then ( (result) => {
     vacayApp.cityID = result.location_suggestions[0].id;
-    vacayApp.zomatoEstablishment(vacayApp.cityID);
+    vacayApp.zomatoCollections(vacayApp.cityID);
   });
 };
 
-// establishment types (i.e wine bar, casual dining etc)
-vacayApp.zomatoEstablishment = (cityID) => {
+// Using zomato's built in collections (best of) reviews
+vacayApp.zomatoCollections = (cityID) => {
   return $.ajax({
-    url: vacayApp.zomatoEstablishmentURL,
+    url: vacayApp.zomatoCollectionsURL,
     method: "GET",
     dataType: "json",
     headers: {
@@ -226,64 +211,35 @@ vacayApp.zomatoEstablishment = (cityID) => {
       city_id: cityID,
     }
   }).then((result) => {
-    console.log(result);
+    // console.log(result);
     // need to sort through establishment types and append to html so user can select cuisine type which we feed into the below ajax.
-    
+    vacayApp.collectionsList = result.collections;
+    vacayApp.collectionsToPage(vacayApp.collectionsList);
   });
 };
 
-// using another ajax call, we use city ID and establishment type (put into a dropdown maybe?) and use that selector to input into another ajax search (below)that will populate restaurants. We can sort it a lot.
+vacayApp.collectionsToPage = (input) => {
+  input.forEach( (input) => {
 
-vacayApp.zomatoRestaurantSearch = (cityID, establishment) => {
-  return $.ajax({
-    url: vacayApp.zomatoEstablishmentURL,
-    method: "GET",
-    dataType: "json",
-    headers: {
-      "user-key": vacayApp.zomatoApiKey
-    },
-    data: {
-      entity_id: cityID,
-      // seems like below doesn't populate anything in json.
-      // establishment_type: establishment,
-      sort: "rating",
-      // ascending or descending?
-      order: "asc",
+    const collectionImg = input.collection.image_url;
+    console.log(collectionImg)
+    const collectionDescription = input.collection.description
+    console.log(collectionDescription);
+    const collectionURL = input.collection.share_url
+    console.log(collectionURL)
 
-    }
-  }).then((result) => {
-    console.log(result);
+    const resultsHtml = `
+      <h2>${collectionDescription}</h2>                
+      <a href="${collectionURL}">
+         <img alt="${collectionDescription}" src="${collectionImg}">
+      </a>
+      `;
 
-  });
-};
-
-// another option is to use zomato collections which is essentially their best of list for the locations.
+  $(".restaurants").append(resultsHtml);
 
 
-
-
-
-
-// Below code note needed anymore, leaving for posterity. Delete on final
-
-// maps promise for later.
-// maybe we should cut the map. they look so ugly
-// vacayApp.mapPromise = (city) => {
-//     return $.ajax({
-//         url: vacayApp.hereMapURL,
-//         method: "GET",
-//         dataType: "json",
-//         data: {
-//             apiKey: vacayApp.hereApiKey,
-//             ci: city,
-//             // lat: latitude,
-//             // lon: longitude,
-//             // vt: "0",
-//             // z: "14"
-//         }
-//     });
-//   }
-
+  })
+}
 
 // below code is directly from here.com api docs modifications done as necessary
 // call below to init the map
