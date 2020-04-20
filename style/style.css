@@ -612,3 +612,8 @@ main .innerNav::after {
 main .displayResults {
   overflow-x: auto;
 }
+
+#map {
+  width: 680px;
+  height: 520px;
+}

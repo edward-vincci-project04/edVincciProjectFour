@@ -37,10 +37,10 @@
 // Namespace init
 const vacayApp = {};
 
-// variables
+// constiables
 vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
 vacayApp.hereURL = `https:weather.ls.hereapi.com/weather/1.0/report.json`;
-vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/`;
+vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/mapview`;
 vacayApp.userSelect;
 vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
@@ -60,7 +60,8 @@ vacayApp.destinationsCycle = () => {
     vacayApp.destinations.forEach((location) => {
         // vacayApp.getDestWeather(location[0]);
         // replaced above with more reusable promise
-        vacayApp.weatherPromise(location[0], "observation").then( (result) => {
+        vacayApp.weatherPromise(location[0], "observation")
+        .then( (result) => {
             const vacayArray = result.observations.location[0];
             vacayApp.displayVacay(vacayArray, vacayApp.userSelect, location[1]);
         });
@@ -69,6 +70,7 @@ vacayApp.destinationsCycle = () => {
 
 // display the vacations onto the page 
 vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to take data from two different places
+
     // display city
     const city = vacay.city;
     // disp country
@@ -86,41 +88,76 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
     userSelection === "Cool" && tempDesc === "Quite cool" ||
     userSelection === "Cool" && tempDesc === "Frigid" ||
     userSelection === "Cool" && tempDesc === "Chilly") {
-        // console.log(`The weather in ${city}, ${country} is ${tempDesc}. The current high temperature is ${temp}.`);
-        // need to append the above to the html when that portion has been completed
         
-        // vacayApp.mapPromise(city).then( (result) => {
+        // vacayApp.mapPromise(city)
+        // .then( (result) => {
         //     // trying to display map image but the responseText is literally an image. don't know how to use it
         //     console.log(result);
-        // use mapPromise endpoint as img src
+        // // use mapPromise endpoint as img src
+
+        // // console.log(vacayApp.mapPromise(city));
+
+        // }).fail ( (err1, err2) => {
+        //   console.log("fack", err1);
+        //   console.log("shiet", err2);
         // });
-        // console.log(vacayApp.mapPromise(city));
         
-        vacayApp.weatherPromise(city, "forecast_7days").then( (result) => {
+        vacayApp.weatherPromise(city, "forecast_7days")
+        .then( (result) => {
             const forecastsArray = result.forecasts.forecastLocation.forecast;
-            // console.log(forecastsArray);
             
             // Povidencia is 26C but is cool. ???
             const resultsHtml = `
-                <h3 class="${city} ${country}">${city}, ${country}</h3>
+                <button id ="${city}" class="${country} mapGrab">${city}, ${country}</button>                
                 <p>The current average temperature is ${temp}</p>
                 <p>${cityInfo}</p>`;
+
+                //static map as a fall back 
+                // <img src="https://image.maps.ls.hereapi.com/mia/1.6/?apiKey=${vacayApp.hereApiKey}&ci=${city}&nocp" alt="" class="mapHidden">
             
             const linksHtml = `
                 <li><button class="${country}">${city}</button></li>`;
 
             $(".displayResults").append(resultsHtml);
-            $(".innerNav").append(linksHtml);
+
+            //need to call the click function b/c you can't select the class of the appended elements above otherwise. Solved by moving class of city to an ID to make it unique to grab via attr.
+            // we could move this click to the map nav along with initializing the map so it only runs once instead of repeating on every click here
+            vacayApp.click();
+            vacayApp.mapInit();
         });
 
     } else if (userSelection != tempDesc) {
-        // nothing happens if the temperature doesn't matech the selected temp
+        // nothing happens if the temperature doesn't match the selected temp
     } else {
         console.log("type while (safi is old) console.log('fuuuuuck')"); // error
     }
-
 }
 
+
+// we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
+// COMPLETED - still need to init map somewhere.
+vacayApp.click = () => {
+  $(".mapGrab").on("click", function() {
+    cityClick = $(this).attr("id");
+  
+    // scroll to map area on click see to be broken as in it bounces around
+    $('html, body').animate({
+      scrollTop: $('.mapResults').offset().top,
+    }, 300, 'linear');
+
+    vacayApp.weatherPromise(cityClick, "observation")
+    .then( (result) => {
+        const lat = result.observations.location[0].latitude;
+        const long = result.observations.location[0].longitude;
+        //move map function
+        vacayApp.moveMap(lat, long)
+        
+      });
+    });
+  };
+    $(".mapNav").on("click", function() {
+      vacayApp.mapInit();
+    })
 
 // ajax call to run our cities through to get the array data from.
 vacayApp.getDestWeather = (input) => {
@@ -155,22 +192,59 @@ vacayApp.weatherPromise = (city, product) => {
     });
 }
 
+// Below code note needed anymore, leaving for posterity. Delete on final
+
 // maps promise for later.
 // maybe we should cut the map. they look so ugly
-vacayApp.mapPromise = (city) => {
-    return $.ajax({
-        url: vacayApp.hereMapURL,
-        method: "GET",
-        dataType: "json",
-        data: {
-            apiKey: vacayApp.hereApiKey,
-            ci: city
-        }
-    });
+// vacayApp.mapPromise = (city) => {
+//     return $.ajax({
+//         url: vacayApp.hereMapURL,
+//         method: "GET",
+//         dataType: "json",
+//         data: {
+//             apiKey: vacayApp.hereApiKey,
+//             ci: city,
+//             // lat: latitude,
+//             // lon: longitude,
+//             // vt: "0",
+//             // z: "14"
+//         }
+//     });
+//   }
+
+
+// below code is directly from here.com api docs modifications done as necessary
+// call below to init the map
+vacayApp.mapInit = () => { 
+  // Updated var to const, some namespace was used during testing for better manipulation
+  const platform = new H.service.Platform({
+    apikey: vacayApp.hereApiKey
+  });
+  const defaultLayers = platform.createDefaultLayers();
+
+  // need to empty it for testing as it duplicates if you dont
+  $("#map").empty();
+
+  vacayApp.map = new H.Map(document.getElementById('map'),
+    defaultLayers.vector.normal.map, {
+    center: { lat: 0, lng: 0 },
+    zoom: 1,
+    pixelRatio: window.devicePixelRatio || 1
+  });
+
+  window.addEventListener('resize', () => vacayApp.map.getViewPort().resize());
+  
+  const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(vacayApp.map));
+  
+  const ui = H.ui.UI.createDefault(vacayApp.map, defaultLayers);
+
+}  
+
+// call this to move the map
+vacayApp.moveMap = (latt, long) => {
+  vacayApp.map.setCenter({ lat: latt, lng: long });
+  vacayApp.map.setZoom(13);
 }
-
-
-
 
 // -------------------
 // init
@@ -226,4 +300,5 @@ vacayApp.init = () => {
 // -------------------
 $(()=> {
     vacayApp.init();
+    vacayApp.mapInit();
 })
