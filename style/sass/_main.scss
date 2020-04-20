@@ -40,17 +40,23 @@ main {
 
     .innerNav {
         @include flexCenter();
-        flex-direction: column;
+        justify-content: center;
 
         position: absolute;
         top: 0;
-        right: 12px;
+        left: 0;
 
-        height: 100%;
+        padding: 0 50px;
+        height: 7%;
+        width: 100%;
 
         li {
-            width: 100%;
-            text-align: right;
+            text-align: center;
+            border-right: 1px solid $bgColor;
+        }
+
+        li:last-child {
+            border-right: 1px solid transparent;
         }
 
         button {
@@ -58,7 +64,7 @@ main {
             letter-spacing: 2px;
             padding: 0;
             border: 0;
-            margin: 10px 0;
+            margin: 6px 10px;
 
             border-radius: 0;
             border-bottom: 3px solid transparent;
@@ -72,9 +78,10 @@ main {
         &::after {
             content: '';
             position: absolute;
-            right: -4px;
-            height: 100%;
-            border-right: 3px solid $secondaryWhite;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            border-bottom: 3px solid $secondaryWhite;
         }
     }
 // city info section
@@ -82,63 +89,64 @@ main {
         overflow-x: auto; 
     }
 // city info section ends
-}
-
 // forecasts section
-.sevenDayForecast {
-    display: flex;
-    margin-top: 20px;
+    .sevenDayForecast {
+        display: flex;
+        margin-top: 20px;
 
-    .dayOfWeek {
-        flex: 1 0 11%;
-        border-left: 2px solid $bgColor;
-        padding: 0 4px;
+        .dayOfWeek {
+            flex: 1 0 11%;
+            border-left: 2px solid $bgColor;
+            padding: 0 4px;
 
-        ul {
-            display: flex;
-            flex-direction: column;
+            ul {
+                display: flex;
+                flex-direction: column;
+            }
+            li {
+                height: 45px;
+                border-bottom: 1px solid $secondaryWhite;
+            }
+
+            li:first-child {
+                height: 75px;
+                text-align: center;
+            }
+
+            li:last-child {
+                height: 75px;
+                border-bottom: 1px solid transparent;
+            }
+
+            li:nth-child(n+2) {
+                @include flexCenter();
+            }
+
+            p {
+                display: block;
+                text-align: center;
+            }
+
+            h4 {@include fontSans(14);}
         }
-        li {
-            height: 45px;
-            border-bottom: 1px solid $secondaryWhite;
-        }
 
-        li:first-child {
-            height: 75px;
-            text-align: center;
+        .dayOfWeek:first-of-type,
+        .dayOfWeek:nth-of-type(2) {
+            border-left: 2px solid transparent;
         }
-
-        li:last-child {
-            height: 75px;
-            border-bottom: 1px solid transparent;
+        
+        .dayOfWeek:first-of-type {
+            h4 {text-align: center;}
+            span {@include fontSize(10); display: block;}
+            li:nth-child(n+2){border-right: 4px solid $secondaryWhite;}
+            li:last-child {border-right: 4px solid transparent;}
         }
-
-        li:nth-child(n+2) {
-            @include flexCenter();
-        }
-
-        p {
-            display: block;
-            text-align: center;
-        }
-
-        h4 {@include fontSans(14);}
     }
+    // forecasts end
 
-    .dayOfWeek:first-of-type,
-    .dayOfWeek:nth-of-type(2) {
-        border-left: 2px solid transparent;
-    }
-    
-    .dayOfWeek:first-of-type {
-        h4 {text-align: center;}
-        span {@include fontSize(10); display: block;}
-        li:nth-child(n+2){border-right: 4px solid $secondaryWhite;}
-        li:last-child {border-right: 4px solid transparent;}
+    #map {
+        width: 680px;
+        height: 520px;
     }
 }
-// forecasts end
-#map {
-    width: 680px;
-    height: 520px;
-}
+
