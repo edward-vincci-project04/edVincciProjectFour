@@ -39,7 +39,7 @@ const vacayApp = {};
 
 // constiables
 vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
-vacayApp.hereURL = `https//:weather.ls.hereapi.com/weather/1.0/report.json`;
+vacayApp.hereURL = `https://weather.ls.hereapi.com/weather/1.0/report.json`;
 vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/mapview`;
 vacayApp.zomatoApiKey = `b655786c25f1fdb7949ffd2d5bb49eb6`;
 vacayApp.zomatoCityURL =`https://developers.zomato.com/api/v2.1/cities`
