@@ -62,3 +62,29 @@ p {
 
 // drier code
 // give the userSelect buttons another class to target them globally
+
+
+// media queries begin
+@media (max-width: 1200px) {
+    
+    .innerWrapper {
+        margin-left: 130px;
+    }
+}
+
+@media (max-width: 860px) {
+        
+    .innerWrapper {
+        padding: 15px 25px;
+    }
+}
+
+@media (max-width: 640px) {
+    
+    .innerWrapper {
+        margin-left: 0;
+        height: auto;
+        min-height: 85vh;
+        width: 95%;
+    }
+}

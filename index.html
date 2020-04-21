@@ -19,6 +19,7 @@
     <header>
         <!-- some sort of nav? -->
         <nav class="sideNav">
+            <a href="#move" class="skip-link visuallyHidden">skip to main content</a>
             <ul class="userChoiceMini">
                 <!-- hidden, minied version of main list -->
                 <!-- use js fadeout and in to switch them out. -->
@@ -26,13 +27,22 @@
                 <li><button class="imgSelection" value="Mild"><img src="./assets/warm.png" alt="warm destinations"></button></li>
                 <li><button class="imgSelection" value="Warm"><img src="./assets/hot.png" alt="hot destinations"></button></li>
             </ul>
+            <!-- hamburger checkbox starts -->
+            <input type="checkbox" id="toggle" name="toggle">
+            <label for="toggle" class="toggle">
+                <div class="hamburger">
+                    <div class="hamburger-lines line1"></div>
+                    <div class="hamburger-lines line2"></div>
+                    <div class="hamburger-lines line3"></div>
+                </div>
+            </label>
+            <!-- hamburger ends -->
             <ul class="pageNav">
                 <li><a href="#">top</a></li>
                 <li><a href="#cities">cities</a></li>
                 <li><a href="#forecasts">forecast</a></li>
                 <li class="mapNav"><a href="#maps">maps</a></li>
                 <li><a href="#restaurants">food</a></li>
-                <li><a href="#hotels">hotels</a></li>
             </ul>
         </nav>
         <div class="landingContainer" id="move">
@@ -90,26 +100,9 @@
                     <!-- Map section, use JS to append to the class -->
                     <div id="map"></div>
                 </div>
+                </div>
             </div>
-        </div>
-    </section>
-    
-    <section>
-        <div class="wrapper">
-            <!-- Forecast section -->
-            <!-- custom js slider here? -->
-            <ul class="fiveDayForecast">
-                <!-- imgs to be added via js for more control on how they appear -->
-                <!-- Use an append using weather data from api -->
-                <!-- Here.com api has a forecast_7days_simple 'product' parameter we can use to pull just the weather for the cities as needed. If we remove simple it'll give morning, aft, even weather as well which may be too much info?  -->
-                <li><img src="" alt=""></li>
-                <li><img src="" alt=""></li>
-                <li><img src="" alt=""></li>
-                <li><img src="" alt=""></li>
-                <li><img src="" alt=""></li>
-            </ul>
-        </div>
-    </section>
+        </section>
 
         <section class="mainContainer" id="restaurants">
             <div class="innerWrapper">
@@ -120,16 +113,6 @@
                 <!-- Restaurant stretch goal section -->
                 <!-- custom js slider here? -->
 
-            </div>
-        </section>
-
-        <section class="mainContainer" id="hotels">
-            <!-- hotel stretch goal section -->
-            <div class="innerWrapper">
-                <ul class="innerNav">
-                    <!-- populate with js line 113 -->
-                </ul>
-                <div class="hotels"></div>
             </div>
         </section>
 

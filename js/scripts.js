@@ -61,8 +61,6 @@ vacayApp.destinations = [
 // loop through destinations individually to feed into ajax
 vacayApp.destinationsCycle = () => {
     vacayApp.destinations.forEach((location) => {
-        // vacayApp.getDestWeather(location[0]);
-        // replaced above with more reusable promise
         vacayApp.weatherPromise(location[0], "observation")
         .then( (result) => {
             const vacayArray = result.observations.location[0];
@@ -193,11 +191,9 @@ vacayApp.displayForecasts = (city) => {
 }
 
 // we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
-// COMPLETED - still need to init map somewhere.
 vacayApp.click = function() {
     $("#maps").on("click", ".innerNav button", function() {
         const cityClick = $(this).attr("class");
-        console.log(cityClick);
 
         vacayApp.weatherPromise(cityClick, "observation")
         .then( (result) => {
@@ -206,36 +202,12 @@ vacayApp.click = function() {
             //move map function
             vacayApp.moveMap(lat, long);            
         });
-      });
+    });
 
-          $("#restaurants").on("click", ".innerNav button", function () {
-            const cityClick = $(this).attr("class");
-            console.log(cityClick);
-            $(".restaurants").empty();
-            vacayApp.zomatoCityID(cityClick);
-        });
-
-    //temp disabled as it seems like it's not needed, map loading find with 1 init.
-    // $(".mapNav").on("click", function() {
-    //     vacayApp.mapInit();
-    // });
-};
-
-// ajax call to run our cities through to get the array data from.
-vacayApp.getDestWeather = (input) => {
-    $.ajax({
-        url: vacayApp.hereURL,
-        method: "GET",
-        dataType: "json",
-        data: {
-            apiKey: vacayApp.hereApiKey,
-            product: "observation",
-            name: input,
-            nocp: true
-        }
-    }).then((result) => {
-        const vacayArray = result.observations.location[0];
-        vacayApp.displayVacay(vacayArray, vacayApp.userSelect);
+    $("#restaurants").on("click", ".innerNav button", function () {
+        const cityClick = $(this).attr("class");
+        $(".restaurants").empty();
+        vacayApp.zomatoCityID(cityClick);
     });
 };
 
@@ -256,63 +228,58 @@ vacayApp.weatherPromise = (city, product) => {
 
 // need city id to input into ajax to get establishments (types of restaurants)
 vacayApp.zomatoCityID = (city) => {
-  return $.ajax({
-    url: vacayApp.zomatoCityURL,
-    method: "GET",
-    dataType: "json",
-    headers: {
-      "user-key": vacayApp.zomatoApiKey
-    },
-    data: {
-      q: city,
-    }
-  }).then ( (result) => {
-    // console.log(result);
-    vacayApp.cityID = result.location_suggestions[0].id;
-    vacayApp.zomatoCollections(vacayApp.cityID);
-  });
+    return $.ajax({
+        url: vacayApp.zomatoCityURL,
+        method: "GET",
+        dataType: "json",
+        headers: {
+        "user-key": vacayApp.zomatoApiKey
+        },
+        data: {
+        q: city,
+        }
+    }).then ( (result) => {
+        vacayApp.cityID = result.location_suggestions[0].id;
+        vacayApp.zomatoCollections(vacayApp.cityID);
+    });
 };
 
 // Using zomato's built in collections (best of) reviews
 vacayApp.zomatoCollections = (cityID) => {
-  return $.ajax({
-    url: vacayApp.zomatoCollectionsURL,
-    method: "GET",
-    dataType: "json",
-    headers: {
-      "user-key": vacayApp.zomatoApiKey
-    },
-    data: {
-      city_id: cityID,
-    }
-  }).then((result) => {
-    // console.log(result);
-    // need to sort through establishment types and append to html so user can select cuisine type which we feed into the below ajax.
-    vacayApp.collectionsList = result.collections;
-    vacayApp.collectionsToPage(vacayApp.collectionsList);
-  });
+    return $.ajax({
+        url: vacayApp.zomatoCollectionsURL,
+        method: "GET",
+        dataType: "json",
+        headers: {
+        "user-key": vacayApp.zomatoApiKey
+        },
+        data: {
+        city_id: cityID,
+        }
+    }).then((result) => {
+        // need to sort through establishment types and append to html so user can select cuisine type which we feed into the below ajax.
+        vacayApp.collectionsList = result.collections;
+        vacayApp.collectionsToPage(vacayApp.collectionsList);
+    });
 };
 
 vacayApp.collectionsToPage = (input) => {
-  input.forEach( (input) => {
+    input.forEach( (input) => {
 
-    const collectionImg = input.collection.image_url;
-    // console.log(collectionImg)
-    const collectionDescription = input.collection.description
-    // console.log(collectionDescription);
-    const collectionURL = input.collection.share_url
-    // console.log(collectionURL)
+        const collectionImg = input.collection.image_url;
+        const collectionDescription = input.collection.collectionDescription
+        const collectionURL = input.collection.share_url
 
-    const resultsHtml = `
-      <h2>${collectionDescription}</h2>                
-      <a href="${collectionURL}">
-        <img alt="${collectionDescription}" src="${collectionImg}">
-      </a>
-      `;
+        const resultsHtml = `
+        <h2>${collectionDescription}</h2>                
+        <a href="${collectionURL}">
+            <img alt="${collectionDescription}" src="${collectionImg}">
+        </a>
+        `;
 
-  $(".restaurants").append(resultsHtml);
+    $(".restaurants").append(resultsHtml);
 
-  })
+    })
 }
 
 // below code is directly from here.com api docs modifications done as necessary
@@ -396,7 +363,6 @@ vacayApp.init = () => {
     $(".innerNav").on("click", "button", function() {
         // show different info for diff cities
         vacayApp.displayForecasts($(this).text());
-        console.log($(this).text());
     });
 }
 // -------------------
@@ -404,5 +370,4 @@ vacayApp.init = () => {
 // -------------------
 $(()=> {
     vacayApp.init();
-    vacayApp.mapInit();
 })

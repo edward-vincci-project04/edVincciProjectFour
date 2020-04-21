@@ -359,6 +359,56 @@ p {
   line-height: calc(14 * 1.6px);
 }
 
+@media (max-width: 1200px) {
+  .innerWrapper {
+    margin-left: 130px;
+  }
+}
+
+@media (max-width: 860px) {
+  .innerWrapper {
+    padding: 15px 25px;
+  }
+}
+
+@media (max-width: 640px) {
+  .innerWrapper {
+    margin-left: 0;
+    height: auto;
+    min-height: 85vh;
+    width: 95%;
+  }
+}
+
+header nav label {
+  position: fixed;
+  top: -200%;
+  right: 20px;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+header nav input {
+  display: none;
+}
+
+header h1, header h3 {
+  text-align: center;
+}
+
+header h1 {
+  position: relative;
+}
+
+header h1::after {
+  content: '';
+  width: 100%;
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  border-bottom: 5px solid #D6D6D7;
+}
+
 header li {
   width: 30%;
   padding: 8px;
@@ -376,6 +426,7 @@ header img {
 header .sideNav {
   display: none;
   position: fixed;
+  z-index: 5;
   top: 0;
   left: 0;
   height: 100%;
@@ -391,13 +442,15 @@ header .userChoiceMini {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: #f6f6f6;
+  position: fixed;
+  z-index: 100;
   width: 120px;
   height: 60px;
   margin-top: 20px;
   border: 4px solid #D6D6D7;
   border-left: none;
   border-radius: 0 15px 15px 0;
+  background: #f6f6f6;
 }
 
 header .userChoiceMini li:hover {
@@ -451,9 +504,9 @@ header .userChoice img {
 
 header .pageNav {
   position: absolute;
-  z-index: -3;
   top: 0;
   left: 0;
+  z-index: -3;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -483,7 +536,6 @@ header .pageNav::after {
   content: '';
   position: absolute;
   left: 15px;
-  z-index: -2;
   height: 100%;
   border-left: 6px solid #D6D6D7;
 }
@@ -494,7 +546,6 @@ header .navWarm::after {
   content: '';
   position: absolute;
   left: 15px;
-  z-index: -1;
   height: 100%;
   border-left: 6px solid #69CDE7;
 }
@@ -505,6 +556,92 @@ header .navMild::after {
 
 header .navWarm::after {
   border-left: 6px solid #ED2024;
+}
+
+@media (max-width: 640px) {
+  header .userChoiceMini {
+    margin-top: 10px;
+  }
+  header .userChoice {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+  header .userChoice li {
+    width: 80px;
+  }
+  header nav {
+    /* hamburger starts */
+    /* hamburger animation starts */
+    /* hamburger animation ends */
+    /* hamburger ends */
+  }
+  header nav .pageNav {
+    position: absolute;
+    left: -200%;
+    top: 0;
+    right: 0;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+    -webkit-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+  }
+  header nav label {
+    top: 20px;
+    z-index: 8;
+  }
+  header nav .hamburger {
+    position: relative;
+    width: 13vw;
+    -webkit-transition: 0.3s ease-in;
+    transition: 0.3s ease-in;
+  }
+  header nav .hamburger:hover .hamburger-lines {
+    background: #D6D6D7;
+    border: 1px solid transparent;
+  }
+  header nav .hamburger-lines {
+    width: 100%;
+    height: 5px;
+    border: 1px solid #181818;
+    border-radius: 20px;
+    margin: 6px 0;
+    background: #f6f6f6;
+    -webkit-transition: 0.5s ease 0.5s;
+    transition: 0.5s ease 0.5s;
+  }
+  header nav .hamburger-lines:nth-child(2) {
+    background: #b4f6ff;
+  }
+  header nav .hamburger:active .hamburger-lines {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px);
+  }
+  header nav input[name="toggle"]:checked + label > .hamburger {
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+  header nav input[name="toggle"]:checked + label > .hamburger > .line1 {
+    -webkit-transform: translateY(12px);
+            transform: translateY(12px);
+  }
+  header nav input[name="toggle"]:checked + label > .hamburger > .line2 {
+    -webkit-transform: translateY(-9px);
+            transform: translateY(-9px);
+  }
+  header nav input[name="toggle"]:checked ~ .pageNav {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    width: 140px;
+    background: #b4f6ff;
+  }
+  header nav .hamburger:hover, header nav .hamburger:focus {
+    cursor: pointer;
+  }
 }
 
 main .mainContainer {
@@ -567,21 +704,21 @@ main .innerNav {
       -ms-flex-align: center;
           align-items: center;
   justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   position: absolute;
   top: 0;
   left: 0;
   padding: 0 50px;
-  height: 7%;
+  min-height: 50px;
   width: 100%;
 }
 
 main .innerNav li {
   text-align: center;
   border-right: 1px solid #b4f6ff;
-}
-
-main .innerNav li:last-child {
-  border-right: 1px solid transparent;
+  border-left: 1px solid #b4f6ff;
+  margin: 3px 0;
 }
 
 main .innerNav button {
@@ -622,12 +759,15 @@ main .sevenDayForecast {
   display: -ms-flexbox;
   display: flex;
   margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
 }
 
 main .sevenDayForecast .dayOfWeek {
   -webkit-box-flex: 1;
       -ms-flex: 1 0 11%;
           flex: 1 0 11%;
+  min-width: 70px;
   border-left: 2px solid #b4f6ff;
   padding: 0 4px;
 }
@@ -687,6 +827,10 @@ main .sevenDayForecast .dayOfWeek:nth-of-type(2) {
   border-left: 2px solid transparent;
 }
 
+main .sevenDayForecast .dayOfWeek:first-of-type {
+  min-width: 50px;
+}
+
 main .sevenDayForecast .dayOfWeek:first-of-type h4 {
   text-align: center;
 }
@@ -710,12 +854,19 @@ main #map {
   height: 520px;
 }
 
-.restaurants {
+main .restaurants {
   overflow-x: auto;
   text-align: center;
 }
 
-.restaurants img {
+main .restaurants img {
   width: 40%;
   margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  main .mainContainer {
+    min-height: 100vh;
+    height: auto;
+  }
 }

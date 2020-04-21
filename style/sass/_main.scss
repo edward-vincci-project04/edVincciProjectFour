@@ -1,5 +1,7 @@
 main {
 
+    // section {height: auto;}
+
     .mainContainer {
         @include flexCenter();
         height: 100vh;
@@ -41,22 +43,22 @@ main {
     .innerNav {
         @include flexCenter();
         justify-content: center;
+        flex-wrap: wrap;
 
         position: absolute;
         top: 0;
         left: 0;
 
         padding: 0 50px;
-        height: 7%;
+        min-height: 50px;
         width: 100%;
 
         li {
             text-align: center;
-            border-right: 1px solid $bgColor;
-        }
 
-        li:last-child {
-            border-right: 1px solid transparent;
+            border-right: 1px solid $bgColor;
+            border-left: 1px solid $bgColor;
+            margin: 3px 0;
         }
 
         button {
@@ -84,18 +86,23 @@ main {
             border-bottom: 3px solid $secondaryWhite;
         }
     }
-// city info section
+
+    // city info section
     .displayResults {
         overflow-x: auto; 
     }
 // city info section ends
+
 // forecasts section
     .sevenDayForecast {
         display: flex;
         margin-top: 20px;
+        width: 100%;
+        overflow-x: auto; // show side scroll on forecasts if screen too small
 
         .dayOfWeek {
             flex: 1 0 11%;
+            min-width: 70px;
             border-left: 2px solid $bgColor;
             padding: 0 4px;
 
@@ -136,6 +143,7 @@ main {
         }
         
         .dayOfWeek:first-of-type {
+            min-width: 50px;
             h4 {text-align: center;}
             span {@include fontSize(10); display: block;}
             li:nth-child(n+2){border-right: 4px solid $secondaryWhite;}
@@ -148,21 +156,24 @@ main {
         width: 680px;
         height: 520px;
     }
+    
+    .restaurants {
+        overflow-x: auto;
+        text-align: center;
+    }
+    .restaurants img {
+        width: 40%;
+        margin: 0 auto;
+    }
+
+    // media Queries begin
+    @media (max-width: 640px) {
+        .mainContainer {
+            min-height: 100vh;
+            height: auto;
+        }
+    }
+    
 }
 
-<<<<<<< HEAD
-#map {
-    width: 680px;
-    height: 520px;
-}
 
-.restaurants {
-    overflow-x: auto;
-    text-align: center;
-}
-.restaurants img {
-    width: 40%;
-    margin: 0 auto;
-}
-=======
->>>>>>> master
