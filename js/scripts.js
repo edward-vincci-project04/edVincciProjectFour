@@ -42,8 +42,8 @@ vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
 vacayApp.hereURL = `https://weather.ls.hereapi.com/weather/1.0/report.json`;
 vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/mapview`;
 vacayApp.zomatoApiKey = `b655786c25f1fdb7949ffd2d5bb49eb6`;
-vacayApp.zomatoCityURL =`https://developers.zomato.com/api/v2.1/cities`
-vacayApp.zomatoCollectionsURL = `https://developers.zomato.com/api/v2.1/collections`
+vacayApp.zomatoCityURL =`https://developers.zomato.com/api/v2.1/cities`;
+vacayApp.zomatoCollectionsURL = `https://developers.zomato.com/api/v2.1/collections`;
 vacayApp.userSelect;
 vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
@@ -70,19 +70,16 @@ vacayApp.destinationsCycle = () => {
 };
 
 // display the vacations onto the page 
-vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to take data from two different places
+vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { 
+    //this needs to take data from different places
 
-    // display city
     const city = vacay.city;
-    // disp country
     const country = vacay.country;
+    const tempDesc = vacay.observation[0].temperatureDesc;
     // disp weather (average temperature)
     const temp = Math.floor((parseInt(vacay.observation[0].highTemperature) + parseInt(vacay.observation[0].lowTemperature)) / 2);
-    // Weather api has a weather description which can be helpful for our needs
-    const tempDesc = vacay.observation[0].temperatureDesc;
 
     // if statements to populate list to user
-    // below is testing. needs updating on html completion
     if (userSelection === tempDesc ||
     userSelection === "Cool" && tempDesc === "Cool" ||
     userSelection === "Cool" && tempDesc === "Refreshingly cool" ||
@@ -92,11 +89,6 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
         
         vacayApp.weatherPromise(city, "forecast_7days")
         .then( (result) => {
-            const forecastsArray = result.forecasts.forecastLocation.forecast;
-        
-            //static map as a fall back 
-                // <img src="https://image.maps.ls.hereapi.com/mia/1.6/?apiKey=${vacayApp.hereApiKey}&ci=${city}&nocp" alt="" class="mapHidden">
-            
             const resultsHtml = `
                 <h3 class="${city} ${country}">${city}, ${country}</h3>
                 <p>The current average temperature is ${temp}</p>
@@ -110,9 +102,6 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
             
             // set a default for forecasts
             vacayApp.displayForecasts(city);
-
-            //need to call the click function b/c you can't select the class of the appended elements above otherwise. Solved by moving class of city to an ID to make it unique to grab via attr.
-            // we could move this click to the map nav along with initializing the map so it only runs once instead of repeating on every click here
             vacayApp.click();
             vacayApp.mapInit();
         });
@@ -125,11 +114,8 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { //this needs to ta
 }
 
 vacayApp.displayForecasts = (city) => {
-        
     vacayApp.weatherPromise(city, "forecast_7days_simple").then( (result) => {
         const forecastsArray = result.dailyForecasts.forecastLocation.forecast;
-        $(".userSelectedCity").text(city);
-        $(".sevenDayForecast").empty();
 
         const legendHtml = `
         <li class="legendColumn dayOfWeek">
@@ -148,6 +134,8 @@ vacayApp.displayForecasts = (city) => {
             </ul>
         </li>`;
 
+        $(".userSelectedCity").text(city);
+        $(".sevenDayForecast").empty();
         $(".sevenDayForecast").append(legendHtml);
 
         // forEach to go through each day and spit out data
@@ -186,13 +174,13 @@ vacayApp.displayForecasts = (city) => {
         });
         
     }).fail( (error) => {
-        console.log(error);
+        console.log('safi broke it!', error);
     });
 }
 
 // we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
 vacayApp.click = function() {
-    $("#maps").on("click", ".innerNav button", function() {
+    $("#mapSection").on("click", ".innerNav button", function() {
         const cityClick = $(this).attr("class");
 
         vacayApp.weatherPromise(cityClick, "observation")
@@ -206,12 +194,12 @@ vacayApp.click = function() {
 
     $("#restaurants").on("click", ".innerNav button", function () {
         const cityClick = $(this).attr("class");
-        $(".restaurants").empty();
+        $(".restaurantResults").empty();
         vacayApp.zomatoCityID(cityClick);
     });
 };
 
-// is it possible to make above more reusable by saving into promise?
+// promise from HERE weather api
 vacayApp.weatherPromise = (city, product) => {
     return $.ajax({
         url: vacayApp.hereURL,
@@ -265,21 +253,25 @@ vacayApp.zomatoCollections = (cityID) => {
 
 vacayApp.collectionsToPage = (input) => {
     input.forEach( (input) => {
-
         const collectionImg = input.collection.image_url;
-        const collectionDescription = input.collection.collectionDescription
-        const collectionURL = input.collection.share_url
+        const collectionDescription = input.collection.description;
+        const collectionURL = input.collection.share_url;
 
         const resultsHtml = `
-        <h2>${collectionDescription}</h2>                
-        <a href="${collectionURL}">
-            <img alt="${collectionDescription}" src="${collectionImg}">
-        </a>
+        <div class = "restaurantCard">
+            <h2>${collectionDescription}</h2>                
+            <a href="${collectionURL}">
+                <img alt="${collectionDescription}" src="${collectionImg}">
+            </a>
+        </div
         `;
 
-    $(".restaurants").append(resultsHtml);
+    $(".restaurantResults").append(resultsHtml);
 
-    })
+
+    });
+    console.log(input);
+    
 }
 
 // below code is directly from here.com api docs modifications done as necessary
@@ -306,7 +298,6 @@ vacayApp.mapInit = () => {
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(vacayApp.map));
     
     const ui = H.ui.UI.createDefault(vacayApp.map, defaultLayers);
-
 }  
 
 // call this to move the map
