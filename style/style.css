@@ -281,6 +281,23 @@ ul, ol, li {
   list-style: none;
 }
 
+h1, h2, h3 {
+  font-size: 20px;
+  font-size: 2rem;
+  font-family: 'Nixie One', serif;
+  font-weight: 400;
+  color: #181818;
+}
+
+p {
+  font-size: 14px;
+  font-size: 1.4rem;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 400;
+  color: #181818;
+  line-height: calc(14 * 1.6px);
+}
+
 a {
   font-size: 14px;
   font-size: 1.4rem;
@@ -333,6 +350,7 @@ button {
   width: 80%;
   height: 85vh;
   padding: 30px 50px;
+  padding-top: 8px;
   border: 10px solid #D6D6D7;
   border-radius: 40px;
   margin: auto 0;
@@ -340,23 +358,6 @@ button {
 
 .innerWrapper h3:first-of-type {
   margin-top: 0;
-}
-
-h1, h2, h3 {
-  font-size: 20px;
-  font-size: 2rem;
-  font-family: 'Nixie One', serif;
-  font-weight: 400;
-  color: #181818;
-}
-
-p {
-  font-size: 14px;
-  font-size: 1.4rem;
-  font-family: 'Quicksand', sans-serif;
-  font-weight: 400;
-  color: #181818;
-  line-height: calc(14 * 1.6px);
 }
 
 @media (max-width: 1200px) {
@@ -377,8 +378,7 @@ p {
     min-height: 85vh;
     width: 95%;
   }
-  .resultsContainer .innerWrapper,
-  .restaurants .innerWrapper {
+  .resultsContainer .innerWrapper, .restaurants .innerWrapper {
     height: auto;
   }
 }
@@ -696,6 +696,11 @@ main button:hover {
   border-right: 2px solid transparent;
 }
 
+main .innerNav ~ div {
+  height: 100%;
+  margin-top: 10px;
+}
+
 main .innerNav {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -706,14 +711,10 @@ main .innerNav {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  justify-content: center;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 0 50px;
-  min-height: 50px;
+  position: relative;
+  padding-bottom: 8px;
   width: 100%;
 }
 
@@ -761,7 +762,7 @@ main .sevenDayForecast {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin-top: 20px;
+  margin: auto 0;
   width: 100%;
   overflow-x: auto;
 }
@@ -786,17 +787,17 @@ main .sevenDayForecast .dayOfWeek ul {
 }
 
 main .sevenDayForecast .dayOfWeek li {
-  height: 45px;
+  height: 65px;
   border-bottom: 1px solid #D6D6D7;
 }
 
 main .sevenDayForecast .dayOfWeek li:first-child {
-  height: 75px;
+  height: 85px;
   text-align: center;
 }
 
 main .sevenDayForecast .dayOfWeek li:last-child {
-  height: 75px;
+  height: 85px;
   border-bottom: 1px solid transparent;
 }
 
@@ -855,7 +856,6 @@ main .sevenDayForecast .dayOfWeek:first-of-type li:last-child {
 main .theMap {
   width: 100%;
   height: 100%;
-  margin-top: 80px;
 }
 
 main .restaurantResults {

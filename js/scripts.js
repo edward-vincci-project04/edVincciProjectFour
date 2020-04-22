@@ -1,49 +1,14 @@
-/**
- *  Destination places by Weather
- * 
- * Landing page welcoming the user and explaining what the app does.
- * A button which will allow the user to proceed. Said button will have a listener that will hide or scroll the welcome screen to the main content.
- * 
- * Main content of page will have a 'box' with pictures of weather preferences (Cold, warm, hot).
- * The imgs will be selectors or maybe using a click listener give the action an animation like a button to show it being selected.
- * 
- * The selection will populate travel destinations from a list we created based on research (of best destinations) which we'll feed into the  ajax function from which we will pull data out based on the temperature range the user selected. Those 
- * destinations will be put into a list on the page.  * 
- * 
- * 
-    Initial travel list to work with (subject to change and/or grow):
-    Bali, Indonesia
-    Kerry, Ireland
-    Male, The Maldives
-    Waikato, New Zealand
-    McMurdo Station, Antarctica
-    Bridgetown, Barbados
-    Providencia, Colombia
-    Reykjavík, Iceland
-    Kyoto, Japan
-    Tromsø, Norway
- * 
- * Stretch goals:
- * 
- * From the list the user can select a destination which will pull it up on the map.
- * 5 or 7 day forecast of location selected
- * top restaurants in the location selected
- * Recommended hotels in the location selected
- * selector for weather condition to further refine search
- * when user selects city, a blurb about it will appear giving a small snippet of it.
- * 
- */
+const vacayApp = {}; // namespace
 
-// Namespace init
-const vacayApp = {};
-
-// constiables
 vacayApp.hereApiKey = `Cl4BqeFBq-GNBKFZC1Nz9Ux12AiOXdtj6r2EG-CWSdY`;
 vacayApp.hereURL = `https://weather.ls.hereapi.com/weather/1.0/report.json`;
+
 vacayApp.hereMapURL = `https://image.maps.ls.hereapi.com/mia/1.6/mapview`;
+
 vacayApp.zomatoApiKey = `b655786c25f1fdb7949ffd2d5bb49eb6`;
 vacayApp.zomatoCityURL =`https://developers.zomato.com/api/v2.1/cities`;
 vacayApp.zomatoCollectionsURL = `https://developers.zomato.com/api/v2.1/collections`;
+
 vacayApp.userSelect;
 vacayApp.destinations = [
     ["Bali", "You’ll find beaches, volcanoes, Komodo dragons and jungles sheltering elephants, orangutans and tigers. Basically, it’s paradise. It’s likely you’ve seen an image of Bali on social media at least once in the past seven days, as it’s such a popular bucket list destination for 2019. -forbes.com"], 
@@ -57,12 +22,11 @@ vacayApp.destinations = [
     ["Kyoto", "About 20% of Japan's National Treasures and 14% of Important Cultural Properties exist in the city proper. The UNESCO World Heritage Site Historic Monuments of Ancient Kyoto (Kyoto, Uji and Otsu Cities) includes 17 locations in Kyoto, Uji in Kyoto Prefecture, and Ōtsu in Shiga Prefecture. The site was designated as World Heritage in 1994. -wikipedia.org"], 
     ["Tromso", "The city centre of Tromsø contains the highest number of old wooden houses in Northern Norway, the oldest house dating from 1789. The city is a cultural centre for its region, with several festivals taking place in the summer. Torbjørn Brundtland and Svein Berge of the electronica duo Röyksopp and Lene Marlin grew up and started their careers in Tromsø. -wikipedia.org"]];
 
-
 // loop through destinations individually to feed into ajax
-vacayApp.destinationsCycle = () => {
-    vacayApp.destinations.forEach((location) => {
+vacayApp.destinationsCycle = function() {
+    vacayApp.destinations.forEach(function(location) {
         vacayApp.weatherPromise(location[0], "observation")
-        .then( (result) => {
+        .then( function(result) {
             const vacayArray = result.observations.location[0];
             vacayApp.displayVacay(vacayArray, vacayApp.userSelect, location[1]);
         });
@@ -70,7 +34,7 @@ vacayApp.destinationsCycle = () => {
 };
 
 // display the vacations onto the page 
-vacayApp.displayVacay = (vacay, userSelection, cityInfo) => { 
+vacayApp.displayVacay = function(vacay, userSelection, cityInfo) { 
     //this needs to take data from different places
 
     const city = vacay.city;
@@ -88,7 +52,7 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => {
     userSelection === "Cool" && tempDesc === "Chilly") {
         
         vacayApp.weatherPromise(city, "forecast_7days")
-        .then( (result) => {
+        .then( function(result) {
             const resultsHtml = `
                 <h3 class="${city} ${country}">${city}, ${country}</h3>
                 <p>The current average temperature is ${temp}</p>
@@ -102,7 +66,6 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => {
             
             // set a default for forecasts
             vacayApp.displayForecasts(city);
-            vacayApp.click();
             vacayApp.mapInit();
         });
 
@@ -113,8 +76,8 @@ vacayApp.displayVacay = (vacay, userSelection, cityInfo) => {
     }
 }
 
-vacayApp.displayForecasts = (city) => {
-    vacayApp.weatherPromise(city, "forecast_7days_simple").then( (result) => {
+vacayApp.displayForecasts = function(city) {
+    vacayApp.weatherPromise(city, "forecast_7days_simple").then( function(result) {
         const forecastsArray = result.dailyForecasts.forecastLocation.forecast;
 
         const legendHtml = `
@@ -139,7 +102,7 @@ vacayApp.displayForecasts = (city) => {
         $(".sevenDayForecast").append(legendHtml);
 
         // forEach to go through each day and spit out data
-        forecastsArray.forEach( (day) => {
+        forecastsArray.forEach( function(day) {
             const { 
                 highTemperature, lowTemperature, skyDescription, 
                 uvIndex, utcTime, weekday, windSpeed } =  day;
@@ -173,34 +136,35 @@ vacayApp.displayForecasts = (city) => {
             
         });
         
-    }).fail( (error) => {
+    }).fail( function(error) {
         console.log('safi broke it!', error);
     });
 }
 
 // we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
-vacayApp.click = function() {
-    $("#mapSection").on("click", ".innerNav button", function() {
-        const cityClick = $(this).attr("class");
-
+vacayApp.innerNavClick = function() {
+    // click listener on innerNav (cities)
+    $(".innerNav").on("click", "button", function() {
+        const cityClick = $(this).text();
+        // show different forecasts for diff cities
+        vacayApp.displayForecasts(cityClick);
+        
+        // move the map to the clicked city
         vacayApp.weatherPromise(cityClick, "observation")
-        .then( (result) => {
+        .then( function(result) {
             const lat = result.observations.location[0].latitude;
             const long = result.observations.location[0].longitude;
             //move map function
             vacayApp.moveMap(lat, long);            
         });
-    });
-
-    $("#restaurants").on("click", ".innerNav button", function () {
-        const cityClick = $(this).attr("class");
+        // change restaurant info to clicked city
         $(".restaurantResults").empty();
         vacayApp.zomatoCityID(cityClick);
     });
 };
 
 // promise from HERE weather api
-vacayApp.weatherPromise = (city, product) => {
+vacayApp.weatherPromise = function(city, product) {
     return $.ajax({
         url: vacayApp.hereURL,
         method: "GET",
@@ -215,7 +179,7 @@ vacayApp.weatherPromise = (city, product) => {
 }
 
 // need city id to input into ajax to get establishments (types of restaurants)
-vacayApp.zomatoCityID = (city) => {
+vacayApp.zomatoCityID = function(city) {
     return $.ajax({
         url: vacayApp.zomatoCityURL,
         method: "GET",
@@ -226,40 +190,40 @@ vacayApp.zomatoCityID = (city) => {
         data: {
         q: city,
         }
-    }).then ( (result) => {
+    }).then ( function(result) {
         vacayApp.cityID = result.location_suggestions[0].id;
         vacayApp.zomatoCollections(vacayApp.cityID);
     });
 };
 
 // Using zomato's built in collections (best of) reviews
-vacayApp.zomatoCollections = (cityID) => {
+vacayApp.zomatoCollections = function(cityID) {
     return $.ajax({
         url: vacayApp.zomatoCollectionsURL,
         method: "GET",
         dataType: "json",
         headers: {
-        "user-key": vacayApp.zomatoApiKey
+            "user-key": vacayApp.zomatoApiKey
         },
         data: {
-        city_id: cityID,
+            city_id: cityID,
         }
-    }).then((result) => {
+    }).then(function(result) {
         // need to sort through establishment types and append to html so user can select cuisine type which we feed into the below ajax.
         vacayApp.collectionsList = result.collections;
         vacayApp.collectionsToPage(vacayApp.collectionsList);
     });
 };
 
-vacayApp.collectionsToPage = (input) => {
-    input.forEach( (input) => {
+vacayApp.collectionsToPage = function(input) {
+    input.forEach( function(input) {
         const collectionImg = input.collection.image_url;
         const collectionDescription = input.collection.description;
         const collectionURL = input.collection.share_url;
 
         const resultsHtml = `
         <div class = "restaurantCard">
-            <h2>${collectionDescription}</h2>                
+            <h2>${collectionDescription}</h2>
             <a href="${collectionURL}">
                 <img alt="${collectionDescription}" src="${collectionImg}">
             </a>
@@ -267,16 +231,12 @@ vacayApp.collectionsToPage = (input) => {
         `;
 
     $(".restaurantResults").append(resultsHtml);
-
-
     });
-    console.log(input);
-    
 }
 
 // below code is directly from here.com api docs modifications done as necessary
 // call below to init the map
-vacayApp.mapInit = () => { 
+vacayApp.mapInit = function() { 
   // Updated var to const, some namespace was used during testing for better manipulation
     const platform = new H.service.Platform({
         apikey: vacayApp.hereApiKey
@@ -301,7 +261,7 @@ vacayApp.mapInit = () => {
 }  
 
 // call this to move the map
-vacayApp.moveMap = (latt, long) => {
+vacayApp.moveMap = function(latt, long) {
     vacayApp.map.setCenter({ lat: latt, lng: long });
     vacayApp.map.setZoom(13);
 }
@@ -309,7 +269,9 @@ vacayApp.moveMap = (latt, long) => {
 // -------------------
 // init
 // -------------------
-vacayApp.init = () => {
+vacayApp.init = function() {
+    vacayApp.innerNavClick(); // handles clicks on inner nav
+
     $("main").hide();
     // $(".sideNav").fadeIn(); //testing purposes
     // user select portion
@@ -350,15 +312,15 @@ vacayApp.init = () => {
         }, 300, 'linear');
     });
 
-    // click listener on innerNav (cities)
-    $(".innerNav").on("click", "button", function() {
-        // show different info for diff cities
-        vacayApp.displayForecasts($(this).text());
-    });
+    // // click listener on innerNav (cities)
+    // $(".innerNav").on("click", "button", function() {
+    //     // show different info for diff cities
+    //     vacayApp.displayForecasts($(this).text());
+    // });
 }
 // -------------------
 // doc ready
 // -------------------
-$(()=> {
+$(function() {
     vacayApp.init();
 })
