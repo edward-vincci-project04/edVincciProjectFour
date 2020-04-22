@@ -599,8 +599,8 @@ header .navWarm::after {
   header nav .hamburger {
     position: relative;
     width: 13vw;
-    -webkit-transition: 0.3s ease-in;
-    transition: 0.3s ease-in;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
   }
   header nav .hamburger:hover .hamburger-lines {
     background: #D6D6D7;
@@ -609,14 +609,14 @@ header .navWarm::after {
   header nav .hamburger-lines {
     width: 100%;
     height: 5px;
-    border: 1px solid #181818;
+    border: 1px solid #c7c7c8;
     border-radius: 20px;
     margin: 6px 0;
     background: #f6f6f6;
     -webkit-transition: 0.5s ease 0.5s;
     transition: 0.5s ease 0.5s;
   }
-  header nav .hamburger-lines:nth-child(2) {
+  header nav .hamburger-lines:nth-child(3) {
     background: #b4f6ff;
   }
   header nav .hamburger:active .hamburger-lines {
@@ -628,12 +628,16 @@ header .navWarm::after {
             transform: rotate(180deg);
   }
   header nav input[name="toggle"]:checked + label > .hamburger > .line1 {
-    -webkit-transform: translateY(12px);
-            transform: translateY(12px);
+    -webkit-transform: translateY(22px);
+            transform: translateY(22px);
   }
   header nav input[name="toggle"]:checked + label > .hamburger > .line2 {
-    -webkit-transform: translateY(-9px);
-            transform: translateY(-9px);
+    -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+  }
+  header nav input[name="toggle"]:checked + label > .hamburger > .line3 {
+    -webkit-transform: translateY(-22px);
+            transform: translateY(-22px);
   }
   header nav input[name="toggle"]:checked ~ .pageNav {
     position: fixed;

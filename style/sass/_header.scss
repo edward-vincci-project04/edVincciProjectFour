@@ -168,7 +168,7 @@ header {
             .hamburger {
                 position: relative;
                 width: 13vw;
-                transition: 0.3s ease-in;
+                transition: 0.3s ease;
 
                 &:hover .hamburger-lines{
                     background: $secondaryWhite;
@@ -179,14 +179,14 @@ header {
             .hamburger-lines {
                 width: 100%;
                 height: 5px;
-                border: 1px solid $primaryBlack;
+                border: 1px solid darken($secondaryWhite, 6);
                 border-radius: 20px;
                 margin: 6px 0;
                 
                 background: $primaryWhite;
                 transition: 0.5s ease 0.5s;
         
-                &:nth-child(2){background: $bgColor;}
+                &:nth-child(3){background: $bgColor;}
             }
 
             .hamburger:active .hamburger-lines { transform: translateY(-10px); }
@@ -197,11 +197,16 @@ header {
             }
 
             input[name="toggle"]:checked + label > .hamburger > .line1 {
-                transform: translateY(12px);
+                transform: translateY(22px);
             }
 
             input[name="toggle"]:checked + label > .hamburger > .line2 {
-                transform: translateY(-9px);
+                transform: rotate(180deg);
+            }
+
+
+            input[name="toggle"]:checked + label > .hamburger > .line3 {
+                transform: translateY(-22px);
             }
             /* hamburger animation ends */
 

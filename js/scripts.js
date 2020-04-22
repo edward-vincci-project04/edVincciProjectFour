@@ -42,37 +42,40 @@ vacayApp.displayVacay = function(vacay, userSelection, cityInfo) {
     const tempDesc = vacay.observation[0].temperatureDesc;
     // disp weather (average temperature)
     const temp = Math.floor((parseInt(vacay.observation[0].highTemperature) + parseInt(vacay.observation[0].lowTemperature)) / 2);
-
     // if statements to populate list to user
-    if (userSelection === tempDesc ||
+    if ( 
+    tempDesc.toLowerCase().includes(userSelection.toLowerCase()) ||
+    userSelection === "Warm" && tempDesc.toLowerCase().includes("hot") ||
     userSelection === "Cool" && tempDesc === "Cool" ||
     userSelection === "Cool" && tempDesc === "Refreshingly cool" ||
     userSelection === "Cool" && tempDesc === "Quite cool" ||
     userSelection === "Cool" && tempDesc === "Frigid" ||
-    userSelection === "Cool" && tempDesc === "Chilly") {
+    userSelection === "Cool" && tempDesc === "Chilly"
+    ) {
+        const resultsHtml = `
+            <h3 class="${city} ${country}">${city}, ${country}</h3>
+            <p>The current average temperature is ${temp}°C</p>
+            <p>${cityInfo}</p>`;
         
-        vacayApp.weatherPromise(city, "forecast_7days")
-        .then( function(result) {
-            const resultsHtml = `
-                <h3 class="${city} ${country}">${city}, ${country}</h3>
-                <p>The current average temperature is ${temp}</p>
-                <p>${cityInfo}</p>`;
-            
-            const linksHtml = `
-                <li><button class="${city}">${city}</button></li>`;
+        const linksHtml = `
+            <li><button class="${city}">${city}</button></li>`;
 
-            $(".displayResults").append(resultsHtml);
-            $(".innerNav").append(linksHtml);
-            
-            // set a default for forecasts
-            vacayApp.displayForecasts(city);
-            vacayApp.mapInit();
-        });
+        $(".displayResults").append(resultsHtml);
+        $(".innerNav").append(linksHtml);
+        
+        // set a default for forecasts
+        vacayApp.displayForecasts(city);
+        // set default map
+        vacayApp.moveMap(vacay.latitude, vacay.longitude);
+        // set default food
+        vacayApp.zomatoCityID(city);
+        
 
     } else if (userSelection != tempDesc) {
         // nothing happens if the temperature doesn't match the selected temp
     } else {
         console.log("type while (safi is old) console.log('fuuuuuck')"); // error
+        
     }
 }
 
@@ -141,7 +144,7 @@ vacayApp.displayForecasts = function(city) {
     });
 }
 
-// we need to take the name of the clicked item, use it to run an ajax call to grab it's lat and long which we then push to mapInit and moveMap. May combine those two depending on how we want the map to first appear.
+// take the name of the clicked item, use it to run an ajax call to grab it's lat and long
 vacayApp.innerNavClick = function() {
     // click listener on innerNav (cities)
     $(".innerNav").on("click", "button", function() {
@@ -158,7 +161,6 @@ vacayApp.innerNavClick = function() {
             vacayApp.moveMap(lat, long);            
         });
         // change restaurant info to clicked city
-        $(".restaurantResults").empty();
         vacayApp.zomatoCityID(cityClick);
     });
 };
@@ -185,14 +187,24 @@ vacayApp.zomatoCityID = function(city) {
         method: "GET",
         dataType: "json",
         headers: {
-        "user-key": vacayApp.zomatoApiKey
-        },
-        data: {
-        q: city,
-        }
+            "user-key": vacayApp.zomatoApiKey
+            },
+            data: {
+            q: city,
+            }
     }).then ( function(result) {
-        vacayApp.cityID = result.location_suggestions[0].id;
-        vacayApp.zomatoCollections(vacayApp.cityID);
+        console.log(city, result);
+        
+        if (result.location_suggestions.length === 0) {
+            const resultsHtml = `<p>Sorry Zomato doesn't have information on this location</p>`;
+            $(".restaurantResults").empty();
+            $(".restaurantResults").append(resultsHtml);
+            
+        } else {
+            vacayApp.cityID = result.location_suggestions[0].id;
+            vacayApp.zomatoCollections(vacayApp.cityID);
+        
+        }
     });
 };
 
@@ -204,18 +216,22 @@ vacayApp.zomatoCollections = function(cityID) {
         dataType: "json",
         headers: {
             "user-key": vacayApp.zomatoApiKey
-        },
-        data: {
+            },
+            data: {
             city_id: cityID,
-        }
+            }
     }).then(function(result) {
-        // need to sort through establishment types and append to html so user can select cuisine type which we feed into the below ajax.
-        vacayApp.collectionsList = result.collections;
-        vacayApp.collectionsToPage(vacayApp.collectionsList);
+            vacayApp.collectionsList = result.collections;
+            vacayApp.collectionsToPage(vacayApp.collectionsList);
+
+    }).fail(function(error) {
+        console.log("zomato error", error);
     });
 };
 
 vacayApp.collectionsToPage = function(input) {
+    $(".restaurantResults").empty();
+
     input.forEach( function(input) {
         const collectionImg = input.collection.image_url;
         const collectionDescription = input.collection.description;
@@ -227,11 +243,11 @@ vacayApp.collectionsToPage = function(input) {
             <a href="${collectionURL}">
                 <img alt="${collectionDescription}" src="${collectionImg}">
             </a>
-        </div
-        `;
+        </div>`;
 
-    $(".restaurantResults").append(resultsHtml);
+        $(".restaurantResults").append(resultsHtml);
     });
+
 }
 
 // below code is directly from here.com api docs modifications done as necessary
@@ -271,6 +287,7 @@ vacayApp.moveMap = function(latt, long) {
 // -------------------
 vacayApp.init = function() {
     vacayApp.innerNavClick(); // handles clicks on inner nav
+    vacayApp.mapInit(); // start map section
 
     $("main").hide();
     // $(".sideNav").fadeIn(); //testing purposes
@@ -281,22 +298,26 @@ vacayApp.init = function() {
 
         vacayApp.userSelect = $(this).val();
         vacayApp.destinationsCycle();
-        // dynamic hover color on <a> tags: 
-
-        $("a").hover( function(e) {
-            let dynamicColor = '';
-            
-            if (vacayApp.userSelect === "Cool") {
-                dynamicColor = '#69CDE7';
-            } else if (vacayApp.userSelect === "Mild") {
-                dynamicColor = '#F8971D';
-            } else if (vacayApp.userSelect === "Warm") {
-                dynamicColor = '#ED2024';
-            }
-            
-            $(this).css("border-bottom", `5px solid ${e.type === "mouseenter"?`${dynamicColor}`:"transparent"}`);
-        });
+        // dynamicColors
+        let dynamicColor = '';
         
+        if (vacayApp.userSelect === "Cool") {
+            dynamicColor = '#69CDE7';
+
+        } else if (vacayApp.userSelect === "Mild") {
+            dynamicColor = '#F8971D';
+
+        } else if (vacayApp.userSelect === "Warm") {
+            dynamicColor = '#ED2024';
+
+        }
+        // a tags hover dynamic colors
+        $("a").hover( function(e) {
+            $(this).css("border-bottom", 
+            `5px solid ${e.type === "mouseenter"?`${dynamicColor}`:"transparent"}`);
+        });
+        // hamburger dynamic colors
+        $(".hamburger-lines:nth-child(3)").css("background", `${dynamicColor}`);
         // dynamic color for nav line:
         // can't use $(".pageNav::after").css(); because jQ can't select ::after
         $(".pageNav").removeClass().addClass("pageNav")
@@ -311,12 +332,6 @@ vacayApp.init = function() {
             scrollTop: $('.resultsContainer').offset().top,
         }, 300, 'linear');
     });
-
-    // // click listener on innerNav (cities)
-    // $(".innerNav").on("click", "button", function() {
-    //     // show different info for diff cities
-    //     vacayApp.displayForecasts($(this).text());
-    // });
 }
 // -------------------
 // doc ready
