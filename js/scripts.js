@@ -193,8 +193,6 @@ vacayApp.zomatoCityID = function(city) {
             q: city,
             }
     }).then ( function(result) {
-        console.log(city, result);
-        
         if (result.location_suggestions.length === 0) {
             const resultsHtml = `<p>Sorry Zomato doesn't have information on this location</p>`;
             $(".restaurantResults").empty();
